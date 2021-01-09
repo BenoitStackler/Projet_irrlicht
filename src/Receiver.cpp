@@ -13,6 +13,15 @@ bool Receiver::OnEvent(const irr::SEvent &event)
         std::cout << event.KeyInput.Key << std::endl;
         KeyIsDown[event.KeyInput.Key] = event.KeyInput.PressedDown;
     }
+    else if (event.EventType == irr::EET_MOUSE_INPUT_EVENT)
+    {
+
+        std::cout << event.MouseInput.ButtonStates << std::endl;
+        KeyIsDown[irr::KEY_LBUTTON] = event.MouseInput.isLeftPressed();
+
+        std::cout << event.MouseInput.ButtonStates << std::endl;
+        KeyIsDown[irr::KEY_RBUTTON] = event.MouseInput.isRightPressed();
+    }
 
     return false;
 }
@@ -38,11 +47,11 @@ void keyControl(Receiver receiver)
     else if (receiver.IsKeyDown(irr::KEY_ESCAPE))
     {
         std::cout << "esc down" << std::endl;
-        device->closeDevice()
+        device->closeDevice();
     }
-
     else if (receiver.IsKeyDown(irr::KEY_KEY_Q))
     {
         std::cout << "Q down" << std::endl;
+        device->closeDevice();
     }
 }
