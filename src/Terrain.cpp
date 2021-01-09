@@ -1,19 +1,18 @@
 #include "Terrain.hpp"
 
-extern irr::video::IVideoDriver* driver;
-extern irr::scene::ISceneManager* smgr;
-extern irr::IrrlichtDevice* device;
+extern irr::video::IVideoDriver *driver;
+extern irr::scene::ISceneManager *smgr;
+extern irr::IrrlichtDevice *device;
 
-Terrain::Terrain() {}                                               
-Terrain::Terrain(const irr::io::path&  filename, const irr::io::path&  textname):
-        Terrain(filename, textname, irr::core::vector3df(0.0f))
-{}
+Terrain::Terrain() {}
+Terrain::Terrain(const irr::io::path &filename, const irr::io::path &textname) : Terrain(filename, textname, irr::core::vector3df(0.0f))
+{
+}
 
-Terrain::Terrain(const irr::io::path&  filename, const irr::io::path&  textname, irr::core::vector3df position):
-        Terrain(filename, textname, position, irr::core::vector3df(0.0f), irr::core::vector3df(0.0f))
-{}
-Terrain::Terrain(const irr::io::path&  filename, const irr::io::path&  textname, irr::core::vector3df pos, irr::core::vector3df rot, irr::core::vector3df sc):
-        m_position(pos), m_rotation(rot), m_scale(sc)
+Terrain::Terrain(const irr::io::path &filename, const irr::io::path &textname, irr::core::vector3df position) : Terrain(filename, textname, position, irr::core::vector3df(0.0f), irr::core::vector3df(0.0f))
+{
+}
+Terrain::Terrain(const irr::io::path &filename, const irr::io::path &textname, irr::core::vector3df pos, irr::core::vector3df rot, irr::core::vector3df sc) : m_position(pos), m_rotation(rot), m_scale(sc)
 {
     m_node = smgr->addTerrainSceneNode(filename);
     rotation(rot);
@@ -35,6 +34,6 @@ void Terrain::rotation(irr::core::vector3df rot)
 }
 void Terrain::scale(irr::core::vector3df sc)
 {
-    m_scale= sc;
+    m_scale = sc;
     m_node->setScale(sc);
 }

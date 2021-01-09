@@ -1,19 +1,10 @@
 #include <irrlicht.h>
-#include <iostream>
-#include <fstream>
-#include <vector>
-
 #include "character.hpp"
 #include "hero.hpp"
 #include "enemy.hpp"
 #include "projectile.hpp"
 #include "Terrain.hpp"
 #include "Caisse.hpp"
-#include "Obstacle.hpp"
-#include "Grid.hpp"
-#include "Node_Graph.hpp"
-#include "Path.hpp"
-#include "vec2.hpp"
 
 using namespace irr;
 using namespace core;
@@ -66,7 +57,7 @@ int main()
 {
   // create device
   MyEventReceiver receiver;
-  device = createDevice(video::EDT_OPENGL, dimension2d<u32>(640, 480), 16, false, false, false, &receiver);
+  device = createDevice(video::EDT_OPENGL, dimension2d<u32>(256 * 5, 256 * 5), 16, false, false, false, &receiver);
   if (!device)
     return 1;
   device->setWindowCaption(L"Hello CPE!");
@@ -76,15 +67,18 @@ int main()
   //IGUIEnvironment* guienv = device->getGUIEnvironment();
 
   //smgr->addCameraSceneNodeFPS();
-  smgr->addCameraSceneNode(0, vector3df(0, 500, 0), vector3df(0, 0, 0));
+  ICameraSceneNode *camera = smgr->addCameraSceneNode(0, vector3df(256.0f * 1 / 2, 256.0f * 1, 256.0f * 1 / 2), vector3df(-1.0f + 256.0f * 1 / 2, 0, 256.0f * 1 / 2));
+  camera->setRotation(vector3df(32, 90, 90));
+  camera->bindTargetAndRotation(true);
 
   // guienv->addStaticText(L"Hello World! This is the Irrlicht Software renderer!",
   // rect<s32>(10,10,260,22), true);
   device->getFileSystem()->addFileArchive("./irrlicht-1.8.4/media/map-20kdm2.pk3");
 
-  Terrain terain = Terrain("./irrlicht-1.8.4/media/terrain-heightmap.bmp", "./irrlicht-1.8.4/media/terrain-texture.jpg", vector3df(-150, 0, -150), vector3df(0, 0, 0), vector3df(20.0f, 0, 20.0f));
-  Caisse caisse = Caisse(vector2d<int>(140, 130), 1.0f);
-
+  Terrain terain = Terrain("./irrlicht-1.8.4/media/terrain-heightmap.bmp", "./irrlicht-1.8.4/media/stones.jpg", vector3df(0.0f, 0.0f, 0.0f), vector3df(0, 0, 0), vector3df(1.0f, 0, 1.0f));
+  Caisse caisse = Caisse(vector2d<int>(10, 10), 10.0f);
+  Caisse caisse1 = Caisse(vector2d<int>(120, 120), 10.0f);
+  caisse1.scale(vector3df(3.0f, 1.0f, 1.0f));
   Hero hero = Hero("./irrlicht-1.8.4/media/sydney.md2", "./irrlicht-1.8.4/media/sydney.bmp", vector3df(0, 0, 0), vector3df(0, 0, 0), 200.0f, 20.0f);
   std::vector<Enemy> enemies = create_enemy(3, hero);
 
@@ -120,110 +114,6 @@ int main()
 
   // This is the movemen speed in units per second.
   const f32 MOVEMENT_SPEED = 40.f;
-
-
-  int Nx = 10;
-    int Ny = 10;
-
-    Obstacle obst1;
-    obst1.x(1);
-    obst1.y(2);
-    obst1.nx(2);
-    obst1.ny(1);
-
-    Obstacle obst2;
-    obst2.x(6);
-    obst2.y(6);
-    obst2.nx(3);
-    obst2.ny(2);
-
-    Obstacle obst3;
-    obst3.x(5);
-    obst3.y(4);
-    obst3.nx(2);
-    obst3.ny(2);
-
-    Obstacle obst4;
-    obst4.x(3);
-    obst4.y(6);
-    obst4.nx(2);
-    obst4.ny(2);
-
-
-    std::vector<Obstacle> obstacles;
-    obstacles.push_back(obst1);
-    obstacles.push_back(obst2);
-    obstacles.push_back(obst3);
-    obstacles.push_back(obst4);
-
-    Grid grid = create_grid_obstacles(Nx, Ny, obstacles);
-
-
-
-    std::vector<vec2> nodes = get_nodes_positions(Nx, Ny, obstacles, grid);
-    Grid grid_nodes(Nx, Ny);
-
-    for (int k = 0 ; k < nodes.size() ; k++){
-        grid_nodes(nodes[k].x, nodes[k].y) = 1;
-    }
-
-    for (int i = 0 ; i < Nx ; i++){
-        for (int j = 0 ; j < Ny ; j++){
-            std::cout << grid(i, j) + 2*grid_nodes(i, j) << " " ;
-
-        }
-        std::cout << std::endl;
-    }
-
-    vec2 p0;
-    vec2 p1;
-    p0.x = 0;
-    p1.x = 2;
-    p0.y = 3;
-    p1.y = 5;
-
-    auto c = bresenham(p0, p1);
-
-    for (auto p : c){
-    }
-
-
-
-    std::vector<Node_Graph> vec_nodes;
-    int k = 0;
-    for (vec2 node_v : nodes){
-        vec_nodes.push_back(Node_Graph(node_v.x, node_v.y, k));
-        ++k;
-    } 
-    Node_Graph start(7, 4, k);
-    ++k;
-    Node_Graph end(1, 9, k);
-
-
-    vec_nodes.push_back(end);
-    vec_nodes.push_back(start);
-
-    start.compute_neighbours(vec_nodes, grid);
-    end.compute_neighbours(vec_nodes, grid);
-
-    for (int k = 0 ; k < vec_nodes.size() ; k++){
-        vec_nodes[k].compute_neighbours(vec_nodes, grid);
-    }
-
-    int s = vec_nodes.size();
-
-    Path foundPath = find_path(vec_nodes, start, end);
-
-    for (Node_Graph node : foundPath.path()){
-        std::cout << '(' << node.x() << ',' << node.y() <<')' << std::endl;
-    }
-
-
-
-
-
-
-
 
   while (device->run())
   {
