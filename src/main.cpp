@@ -86,7 +86,7 @@ int main()
   Terrain terain = Terrain("./irrlicht-1.8.4/media/terrain-heightmap.bmp", "./irrlicht-1.8.4/media/stones.jpg", vector3df(0.0f, 0.0f, 0.0f), vector3df(0, 0, 0), vector3df(1.0f, 0, 1.0f));
   Caisse caisse = Caisse(vector2d<int>(10, 10), 10.0f);
   Caisse caisse1 = Caisse(vector2d<int>(120, 120), 10.0f);
-  //caisse1.scale(vector3df(3.0f, 1.0f, 1.0f));
+  caisse1.scale(vector3df(3.0f, 1.0f, 1.0f));
   Hero hero = Hero("./irrlicht-1.8.4/media/sydney.md2", "./irrlicht-1.8.4/media/sydney.bmp", vector3df(0, 0, 0), vector3df(0, 0, 0), 200.0f, 20.0f);
   std::vector<Enemy> enemies = create_enemy(3, hero);
 
@@ -123,7 +123,6 @@ int main()
   // This is the movemen speed in units per second.
   const f32 MOVEMENT_SPEED = 40.f;
 
-
   int Nx = 10;
   int Ny = 10;
 
@@ -151,7 +150,6 @@ int main()
   obst4.nx(2);
   obst4.ny(2);
 
-
   std::vector<Obstacle> obstacles;
   obstacles.push_back(obst1);
   obstacles.push_back(obst2);
@@ -160,21 +158,21 @@ int main()
 
   Grid grid = create_grid_obstacles(Nx, Ny, obstacles);
 
-
-
   std::vector<vec2> nodes = get_nodes_positions(Nx, Ny, obstacles, grid);
   Grid grid_nodes(Nx, Ny);
 
-  for (int k = 0 ; k < nodes.size() ; k++){
-      grid_nodes(nodes[k].x, nodes[k].y) = 1;
+  for (int k = 0; k < nodes.size(); k++)
+  {
+    grid_nodes(nodes[k].x, nodes[k].y) = 1;
   }
 
-  for (int i = 0 ; i < Nx ; i++){
-      for (int j = 0 ; j < Ny ; j++){
-          std::cout << grid(i, j) + 2*grid_nodes(i, j) << " " ;
-
-      }
-      std::cout << std::endl;
+  for (int i = 0; i < Nx; i++)
+  {
+    for (int j = 0; j < Ny; j++)
+    {
+      std::cout << grid(i, j) + 2 * grid_nodes(i, j) << " ";
+    }
+    std::cout << std::endl;
   }
 
   vec2 p0;
@@ -186,18 +184,16 @@ int main()
 
   auto c = bresenham(p0, p1);
 
-
-
   std::vector<Node_Graph> vec_nodes;
   int k = 0;
-  for (vec2 node_v : nodes){
-      vec_nodes.push_back(Node_Graph(node_v.x, node_v.y, k));
-      ++k;
-  } 
+  for (vec2 node_v : nodes)
+  {
+    vec_nodes.push_back(Node_Graph(node_v.x, node_v.y, k));
+    ++k;
+  }
   Node_Graph start(7, 4, k);
   ++k;
   Node_Graph end(1, 9, k);
-
 
   vec_nodes.push_back(end);
   vec_nodes.push_back(start);
@@ -205,22 +201,19 @@ int main()
   start.compute_neighbours(vec_nodes, grid);
   end.compute_neighbours(vec_nodes, grid);
 
-  for (int k = 0 ; k < vec_nodes.size() ; k++){
-      vec_nodes[k].compute_neighbours(vec_nodes, grid);
+  for (int k = 0; k < vec_nodes.size(); k++)
+  {
+    vec_nodes[k].compute_neighbours(vec_nodes, grid);
   }
 
   int s = vec_nodes.size();
 
   Path foundPath = find_path(vec_nodes, start, end);
 
-  for (Node_Graph node : foundPath.path()){
-      std::cout << '(' << node.x() << ',' << node.y() <<')' << std::endl;
+  for (Node_Graph node : foundPath.path())
+  {
+    std::cout << '(' << node.x() << ',' << node.y() << ')' << std::endl;
   }
-
-
-
-
-
 
   while (device->run())
   {
