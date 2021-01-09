@@ -9,7 +9,7 @@
 class Character
 {
     public :
-    Character(const irr::io::path&  filename, const irr::io::path&  textname, irr::core::vector3df position, irr::core::vector3df direct, float life, float baseDamage);
+    Character(const irr::io::path&  filename, const irr::io::path&  textname, irr::core::vector3di position, irr::core::vector3df direct, float life, float baseDamage);
     Character(const irr::io::path&  filename, const irr::io::path&  textname);
 
     void impact();
@@ -20,6 +20,9 @@ class Character
 
     void position(irr::core::vector3df position);
     void direction(irr::core::vector3df direction);
+
+    float const life() const;
+    float const baseDamage() const;
     
 
     private :
