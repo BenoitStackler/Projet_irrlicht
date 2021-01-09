@@ -65,7 +65,7 @@ int main()
 {
   // create device
   MyEventReceiver receiver;
-  device = createDevice(video::EDT_OPENGL, dimension2d<u32>(256 * 5, 256 * 5), 16, false, false, false, &receiver);
+  device = createDevice(video::EDT_OPENGL, dimension2d<u32>(1000, 1000), 16, false, false, false, &receiver);
   if (!device)
     return 1;
   device->setWindowCaption(L"Hello CPE!");
@@ -75,7 +75,7 @@ int main()
   //IGUIEnvironment* guienv = device->getGUIEnvironment();
 
   //smgr->addCameraSceneNodeFPS();
-  ICameraSceneNode *camera = smgr->addCameraSceneNode(0, vector3df(256.0f * 1 / 2, 256.0f * 1, 256.0f * 1 / 2), vector3df(-1.0f + 256.0f * 1 / 2, 0, 256.0f * 1 / 2));
+  ICameraSceneNode *camera = smgr->addCameraSceneNode(0, vector3df(256.0f * 1 / 2, 256.0f * 0.8, 256.0f * 1 / 2), vector3df(255.0f * 1 / 2, 0, 256.0f * 1 / 2));
   camera->setRotation(vector3df(32, 90, 90));
   camera->bindTargetAndRotation(true);
 
