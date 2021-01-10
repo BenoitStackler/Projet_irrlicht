@@ -40,6 +40,8 @@ std::map<std::string, Path> map_paths;
 
 
 
+std::vector<irr::scene::ITriangleSelector *> selector;
+
 int main()
 {
   // create device
@@ -75,6 +77,10 @@ int main()
   //caisse1.scale(vector3df(3.0f, 1.0f, 1.0f));
   hero = Hero("./irrlicht-1.8.4/media/sydney.md2", "./irrlicht-1.8.4/media/sydney.bmp", vector3di(50, 0, 50), vector3df(0, 0, 0), 200.0f, 20.0f);
   std::vector<Enemy> enemies = create_enemy(3, hero);
+
+  selector.push_back(smgr->createTriangleSelector(caisse.node()->getMesh(), caisse.node()));
+  selector.push_back(smgr->createTriangleSelector(caisse1.node()->getMesh(), caisse1.node()));
+  selector.push_back(smgr->createTriangleSelector(hero.node()));
 
   Projectile proj = hero.shoot();
   //IAnimatedMesh* mesh = smgr->getMesh("./irrlicht-1.8.4/media/sydney.md2");

@@ -16,7 +16,6 @@ bool Receiver::OnEvent(const irr::SEvent &event)
     // Remember whether each key is down or up
     if (event.EventType == irr::EET_KEY_INPUT_EVENT)
     {
-        std::cout << event.KeyInput.Key << std::endl;
         KeyIsDown[event.KeyInput.Key] = event.KeyInput.PressedDown;
     }
     else if (event.EventType == irr::EET_MOUSE_INPUT_EVENT)

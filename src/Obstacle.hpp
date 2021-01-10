@@ -27,6 +27,8 @@ public:
 
     const int id() const; //Getter d'id de l'obstacle
 
+    irr::scene::IMeshSceneNode *const node();
+
     //Setters
     //Position de l'obstacle
     void x(int pos_x);
@@ -48,7 +50,7 @@ private:
     irr::core::vector2d<int> m_position;
     irr::core::vector3df m_rotation;
     irr::f32 m_size;
-    irr::scene::ISceneNode *m_node;
+    irr::scene::IMeshSceneNode *m_node;
 
     //Attributs de position du point haut gauche de l'obstacle
     int m_x; //Position en x du point haut gauche de l'obstacle (en nombre de case de grille)

@@ -109,6 +109,10 @@ const int Obstacle::ny() const { return m_ny; }; //Getter de dimension en y de l
 
 const int Obstacle::id() const { return m_id; }; //Getter d'id de l'obstacle
 
+irr::scene::IMeshSceneNode *const Obstacle::node()
+{
+    return m_node;
+}
 //Setters
 //Position de l'obstacle
 void Obstacle::position(irr::core::vector2d<int> position)
