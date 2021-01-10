@@ -41,6 +41,8 @@ class Node_Graph
 };
 
 bool find(std::vector<Node_Graph>& vect, Node_Graph elem, Node_Graph& node_found);
+Node_Graph find_closest_node(int x, int y, std::vector<Node_Graph> graph);
+Node_Graph find_closest_node(int x, int y, int x_dest, int y_dest, std::vector<Node_Graph> graph);
 
 
 int octant_number(vec2 const& p0,vec2 const& p1);

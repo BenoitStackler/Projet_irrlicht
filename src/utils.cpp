@@ -34,3 +34,12 @@ irr::core::vector2di grid_to_pix_obst(irr::core::vector2di coords_grid_2d)
 
     return coords_pix;
 }
+
+irr::core::vector2di pix_to_grid(irr::core::vector3df coords_pix_3d)
+{
+    irr::core::vector2di coords_grid;
+    coords_grid.X = coords_pix_3d.X / multiplicator - offset;
+    coords_grid.Y = coords_pix_3d.Z / multiplicator - offset;
+
+    return coords_grid;
+}

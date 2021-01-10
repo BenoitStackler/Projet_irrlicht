@@ -3,7 +3,9 @@
 
 #include <vector>
 #include <string>
+#include <map>
 #include "Node_Graph.hpp"
+#include "vec2Node.hpp"
 
 
 class Path
@@ -11,6 +13,7 @@ class Path
     public:
         Path();
         Path(float dist_param);
+        Path(std::vector<Node_Graph> path_param, float dist_param);
         Path(Node_Graph node, Node_Graph start, float dist_param);
         Path(Path path_param, Node_Graph next, float dist_param);
         
@@ -18,8 +21,10 @@ class Path
         float const& dist();
         std::vector<Node_Graph> const& path();
 
+
         void reverse();
         int size();
+
         
 
 
@@ -32,5 +37,7 @@ class Path
 
 Path find_path(std::vector<Node_Graph>& Graph, Node_Graph& source, Node_Graph& target);
 Path find_path_recursive(std::vector<Node_Graph>& Nodes_left, Node_Graph& source, Node_Graph& target);
+
+std::map<std::string, Path> compute_all_paths(std::vector<Node_Graph>& Graph);
 
 #endif

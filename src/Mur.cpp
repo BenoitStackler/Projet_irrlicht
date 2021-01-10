@@ -21,6 +21,7 @@ Mur::Mur(int pos_x, int pos_y, int nx_param, int ny_param):
 Obstacle(pos_x, pos_y, nx_param, ny_param)
 {} 
 
-std::string Mur::type() {
+std::string Mur::type() 
+{
 	return "Mur";
 }

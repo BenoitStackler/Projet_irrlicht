@@ -9,6 +9,7 @@
 class Character
 {
     public :
+    Character();
     Character(const irr::io::path&  filename, const irr::io::path&  textname, irr::core::vector3di position, irr::core::vector3df direct, float life, float baseDamage);
     Character(const irr::io::path&  filename, const irr::io::path&  textname);
 

@@ -10,6 +10,8 @@ extern irr::video::IVideoDriver *driver;
 extern irr::scene::ISceneManager *smgr;
 extern irr::IrrlichtDevice *device;
 
+Character::Character(){}
+
 Character::Character(const irr::io::path &filename, const irr::io::path &textname, irr::core::vector3di pos, irr::core::vector3df direct, float life, float baseDamage) : m_direction(direct), m_life(life), m_baseDamage(baseDamage)
 {
     m_mesh = smgr->getMesh(filename);

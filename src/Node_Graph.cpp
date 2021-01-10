@@ -279,3 +279,49 @@ vec2 symmetry_octant_inverse(vec2 const& p,int const octant)
     }
     return p;
 }
+
+
+Node_Graph find_closest_node(int x, int y, std::vector<Node_Graph> graph)
+{
+    float min_dist = 10000.0f;
+    int index_closest = 0;
+
+    for (int k = 0 ; k <  graph.size() ; k++)
+    {
+        float dist = sqrt(pow(x - graph[k].x(), 2) + pow(y - graph[k].y(), 2));
+        if (dist < min_dist)
+        {
+            index_closest = k;
+            min_dist = dist;
+        }
+    }
+
+    return graph[index_closest];
+}
+
+
+Node_Graph find_closest_node(int x, int y, int x_dest, int y_dest, std::vector<Node_Graph> graph)
+{
+    float min_dist = sqrt(pow(x - x_dest, 2) + pow(y - y_dest, 2));
+    int index_closest = -1;
+
+    for (int k = 0 ; k <  graph.size() ; k++)
+    {
+        float dist = sqrt(pow(x - graph[k].x(), 2) + pow(y - graph[k].y(), 2));
+        if (dist < min_dist)
+        {
+            index_closest = k;
+            min_dist = dist;
+        }
+    }
+
+    if (index_closest == -1)
+    {
+        return Node_Graph(x_dest, y_dest, -1);
+    }
+
+    else
+    {
+        return graph[index_closest];
+    }
+}
