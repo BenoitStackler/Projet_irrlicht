@@ -8,17 +8,16 @@
 #include "vec2.hpp"
 #include "Path.hpp"
 
-
 class Hero : public Character
 {
-    public:
-
+public:
     Hero();
-    Hero(const irr::io::path&  filename, const irr::io::path&  textname, irr::core::vector3di position, irr::core::vector3df direction, float life, float baseDamage);
-    Hero(const irr::io::path&  filename, const irr::io::path&  textname);
+    Hero(const irr::io::path &filename, const irr::io::path &textname, irr::core::vector3di position, irr::core::vector3df direction, float life, float baseDamage);
+    Hero(const irr::io::path &filename, const irr::io::path &textname);
 
     void compute_movements(int x_dest, int y_dest);
     void move();
+    Projectile shoot();
 
     void compute_mvt_to_grid(irr::core::vector3df pos, Node_Graph closest_start);
     void compute_mvt_grid(Node_Graph closest_start, Node_Graph closest_dest);
@@ -26,7 +25,7 @@ class Hero : public Character
 
     void compute_mvt(irr::core::vector3df start, irr::core::vector3df dest);
 
-    private:
+private:
     std::vector<irr::core::vector3df> movement_positions;
 };
 

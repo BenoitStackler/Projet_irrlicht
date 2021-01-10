@@ -10,8 +10,10 @@ class Projectile
 public:
     Projectile(Character *caster, float speed, float damage);
     Projectile(Character *caster);
+    Projectile();
 
     void impact();
+    void move();
     void position(irr::core::vector3df position);
     void direction(irr::core::vector3df direction);
 

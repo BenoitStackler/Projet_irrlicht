@@ -1,10 +1,12 @@
 #include "Receiver.hpp"
 #include "hero.hpp"
+#include "world.hpp"
 
 extern irr::video::IVideoDriver *driver;
 extern irr::scene::ISceneManager *smgr;
 extern irr::IrrlichtDevice *device;
 extern Hero hero;
+extern World world;
 
 irr::s32 x_souris;
 irr::s32 y_souris;
@@ -61,7 +63,10 @@ void keyControl(Receiver receiver)
 
     if (receiver.IsKeyDown(irr::KEY_LBUTTON))
     {
-        // Nothing yet
+        Projectile *proj_ptr = new Projectile;
+        *proj_ptr = hero.shoot();
+        world.addProjectile(proj_ptr);
+        std::cout << "shoot" << std::endl;
     }
     else if (receiver.IsKeyDown(irr::KEY_ESCAPE))
     {

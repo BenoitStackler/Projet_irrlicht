@@ -11,7 +11,7 @@ extern std::vector<irr::scene::ITriangleSelector *> selector;
 
 Projectile::Projectile(Character *caster, float speed, float damage) : m_position(caster->position()), m_direction(caster->direction()), m_speed(speed), m_damage(damage)
 {
-    m_node = smgr->addSphereSceneNode(1.0f);
+    m_node = smgr->addSphereSceneNode(10.0f);
     if (m_node)
     {
         position(m_position + irr::core::vector3df(0.0f, 10, 0.0f));
@@ -19,7 +19,7 @@ Projectile::Projectile(Character *caster, float speed, float damage) : m_positio
         m_node->setMaterialFlag(irr::video::EMF_LIGHTING, false);
         for (auto s : selector)
         {
-            irr::scene::ISceneNodeAnimator *anim = smgr->createCollisionResponseAnimator(s, m_node, irr::core::vector3df(30, 50, 30), irr::core::vector3df(0, -10, 0), irr::core::vector3df(0, 30, 0));
+            irr::scene::ISceneNodeAnimator *anim = smgr->createCollisionResponseAnimator(s, m_node, irr::core::vector3df(5, 5, 5), irr::core::vector3df(0, 0, 0), irr::core::vector3df(0, 30, 0));
             m_node->addAnimator(anim);
             anim->drop();
         }
@@ -31,8 +31,20 @@ Projectile::Projectile(Character *caster)
     Projectile(caster, 1.0f, 10.0f);
 }
 
+Projectile::Projectile()
+{
+}
+
 void Projectile::impact()
 {
+}
+
+void Projectile::move()
+{
+    irr::core::vector3df new_pos = position();
+    position(position() + direction());
+    new_pos = m_node->getAbsolutePosition();
+    std::cout << "eee  " << new_pos.X << "  " << new_pos.Y << "  " << new_pos.Z << std::endl;
 }
 
 void Projectile::position(irr::core::vector3df position)

@@ -78,7 +78,7 @@ int main()
 
   //caisse1.scale(vector3df(3.0f, 1.0f, 1.0f));
   hero = Hero("./irrlicht-1.8.4/media/sydney.md2", "./irrlicht-1.8.4/media/sydney.bmp", vector3di(50, 0, 50), vector3df(0, 0, 0), 200.0f, 20.0f);
-  world.defHero(hero);
+  world.defHero(&hero);
   std::vector<Enemy> enemies = create_enemy(hero);
 
   selector.push_back(smgr->createTriangleSelector(caisse.node()->getMesh(), caisse.node()));
@@ -86,6 +86,7 @@ int main()
   selector.push_back(smgr->createTriangleSelector(hero.node()));
 
   Projectile proj = hero.shoot();
+  world.addProjectile(&proj);
 
   std::vector<Projectile> vect_proj;
   vect_proj.push_back(proj);
@@ -203,7 +204,10 @@ int main()
 
     driver->beginScene(true, true, video::SColor(0, 100, 100, 100));
     hero.move();
-
+    for (auto proj : world.getProjectiles())
+    {
+      proj->move();
+    }
     smgr->drawAll();
 
     driver->endScene();
