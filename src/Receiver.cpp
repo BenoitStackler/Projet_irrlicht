@@ -26,10 +26,8 @@ bool Receiver::OnEvent(const irr::SEvent &event)
 
         KeyIsDown[irr::KEY_RBUTTON] = event.MouseInput.isRightPressed();
 
-        y_souris = (event.MouseInput.X);
-        x_souris = (event.MouseInput.Y);
-
-
+        y_souris = event.MouseInput.X;
+        x_souris = event.MouseInput.Y;
     }
 
     return false;
@@ -51,16 +49,16 @@ void keyControl(Receiver receiver)
 {
     if (receiver.IsKeyDown(irr::KEY_RBUTTON))
     {
-        if (is_right_click_up){
+        if (is_right_click_up)
+        {
             hero.compute_movements(x_souris, y_souris);
             is_right_click_up = false;
         }
     }
-    else 
+    else
     {
         is_right_click_up = true;
     }
-
 
     if (receiver.IsKeyDown(irr::KEY_LBUTTON))
     {

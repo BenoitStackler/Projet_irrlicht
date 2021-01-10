@@ -20,6 +20,8 @@ Projectile::Projectile(Character *caster, float speed, float damage) : m_positio
         for (auto s : selector)
         {
             irr::scene::ISceneNodeAnimator *anim = smgr->createCollisionResponseAnimator(s, m_node, irr::core::vector3df(30, 50, 30), irr::core::vector3df(0, -10, 0), irr::core::vector3df(0, 30, 0));
+            m_node->addAnimator(anim);
+            anim->drop();
         }
     }
 }
@@ -42,4 +44,14 @@ void Projectile::position(irr::core::vector3df position)
 void Projectile::direction(irr::core::vector3df direction)
 {
     m_direction = direction;
+}
+
+irr::core::vector3df Projectile::position()
+{
+    return m_position;
+}
+
+irr::core::vector3df Projectile::direction()
+{
+    return m_direction;
 }

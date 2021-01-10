@@ -10,12 +10,12 @@
 
 class Enemy : public Character
 {
-    public:
-
-    Enemy(const irr::io::path&  filename, const irr::io::path&  textname, irr::core::vector3di position, irr::core::vector3df direction, float life, float baseDamage);
-    Enemy(const irr::io::path&  filename, const irr::io::path&  textname);
+public:
+    Enemy(const irr::io::path &filename, const irr::io::path &textname, irr::core::vector3di position, irr::core::vector3df direction, float life, float baseDamage);
+    Enemy(const irr::io::path &filename, const irr::io::path &textname);
+    Enemy();
 };
 
-std::vector<Enemy> create_enemy(int number, Hero hero);
+std::vector<Enemy> create_enemy(Hero hero);
 
 #endif

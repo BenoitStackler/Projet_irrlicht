@@ -12,7 +12,7 @@ Obstacle::Obstacle() {}
 Obstacle::Obstacle(irr::core::vector2d<int> pos) 
 :m_position(grid_to_pix_obst(pos)), m_x(pos.X), m_y(pos.Y)
 {
-    m_node = smgr->addCubeSceneNode();
+    m_node = smgr->addCubeSceneNode(1.0f, 0, IDFlag_IsPickable);
     if (m_node)
     {
         position(m_position);
@@ -24,7 +24,7 @@ Obstacle::Obstacle(irr::core::vector2d<int> pos)
 Obstacle::Obstacle(irr::core::vector2d<int> pos, irr::f32 size) 
 :m_position(grid_to_pix_obst(pos)), m_size(size), m_x(pos.X), m_y(pos.Y)
 {
-    m_node = smgr->addCubeSceneNode(size);
+    m_node = smgr->addCubeSceneNode(size, 0, IDFlag_IsPickable);
     if (m_node)
     {
         position(m_position);
@@ -36,7 +36,7 @@ Obstacle::Obstacle(irr::core::vector2d<int> pos, irr::f32 size)
 Obstacle::Obstacle(irr::core::vector2d<int> pos, irr::f32 size, irr::core::vector3df rot)
 :m_position(grid_to_pix_obst(pos)), m_size(size), m_rotation(rot), m_x(pos.X), m_y(pos.Y)
 {
-    m_node = smgr->addCubeSceneNode(size);
+    m_node = smgr->addCubeSceneNode(size, 0, IDFlag_IsPickable);
     if (m_node)
     {
         position(m_position);
@@ -100,14 +100,13 @@ irr::core::vector2d<int> const Obstacle::position() const
     return m_position;
 }
 
-const int Obstacle::x() const { return m_x; }; //Getter de position en x de l'obstacle
-const int Obstacle::y() const { return m_y; }; //Getter de position en y de l'obstacle
+int Obstacle::x() const { return m_x; }; //Getter de position en x de l'obstacle
+int Obstacle::y() const { return m_y; }; //Getter de position en y de l'obstacle
 
 //Dimensions de l'obstacle
-const int Obstacle::nx() const { return m_nx; }; //Getter de dimension en x de l'obstacle
-const int Obstacle::ny() const { return m_ny; }; //Getter de dimension en y de l'obstacle
-
-const int Obstacle::id() const { return m_id; }; //Getter d'id de l'obstacle
+int Obstacle::nx() const { return m_nx; }; //Getter de dimension en x de l'obstacle
+int Obstacle::ny() const { return m_ny; }; //Getter de dimension en y de l'obstacle
+int Obstacle::id() const { return m_id; }; //Getter d'id de l'obstacle
 
 irr::scene::IMeshSceneNode *const Obstacle::node()
 {

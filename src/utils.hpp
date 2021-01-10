@@ -12,6 +12,4 @@ irr::core::vector2di pix_to_grid(irr::core::vector3df coords_pix_3d);
 
 
 
-
-
 #endif

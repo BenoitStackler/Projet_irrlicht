@@ -16,6 +16,8 @@
 #include "Path.hpp"
 #include "vec2.hpp"
 #include "Receiver.hpp"
+#include "collision.hpp"
+#include "world.hpp"
 
 using namespace irr;
 using namespace core;
@@ -38,9 +40,9 @@ std::vector<Node_Graph> vec_nodes;
 Hero hero;
 std::map<std::string, Path> map_paths;
 
-
-
 std::vector<irr::scene::ITriangleSelector *> selector;
+irr::scene::ISceneCollisionManager *collMan;
+World world;
 
 int main()
 {
@@ -65,24 +67,30 @@ int main()
   // rect<s32>(10,10,260,22), true);
   device->getFileSystem()->addFileArchive("./irrlicht-1.8.4/media/map-20kdm2.pk3");
 
-  Terrain terain = Terrain("./irrlicht-1.8.4/media/terrain-heightmap.bmp", "./irrlicht-1.8.4/media/stones.jpg", vector3df(0.0f, 0.0f, 0.0f), vector3df(0, 0, 0), vector3df(1000.0f/256.0f, 0, 1000.0f/256.0f));
+  Terrain terain = Terrain("./irrlicht-1.8.4/media/terrain-heightmap.bmp", "./irrlicht-1.8.4/media/stones.jpg", vector3df(0.0f, 0.0f, 0.0f), vector3df(0, 0, 0), vector3df(1000.0f / 256.0f, 0, 1000.0f / 256.0f));
   Caisse caisse = Caisse(vector2d<int>(0, 0), 10.0f);
   Caisse caisse1 = Caisse(vector2d<int>(89, 89), 10.0f);
 
-  Mur murN = Mur(0,0,1,89);
-  Mur murS = Mur(89,0,1,89);
-  Mur murE = Mur(0,89,89,1);
-  Mur murW = Mur(0,0,89,1);
+  Mur murN = Mur(0, 0, 1, 89);
+  Mur murS = Mur(89, 0, 1, 89);
+  Mur murE = Mur(0, 89, 89, 1);
+  Mur murW = Mur(0, 0, 89, 1);
 
   //caisse1.scale(vector3df(3.0f, 1.0f, 1.0f));
   hero = Hero("./irrlicht-1.8.4/media/sydney.md2", "./irrlicht-1.8.4/media/sydney.bmp", vector3di(50, 0, 50), vector3df(0, 0, 0), 200.0f, 20.0f);
-  std::vector<Enemy> enemies = create_enemy(3, hero);
+  world.defHero(hero);
+  std::vector<Enemy> enemies = create_enemy(hero);
 
   selector.push_back(smgr->createTriangleSelector(caisse.node()->getMesh(), caisse.node()));
   selector.push_back(smgr->createTriangleSelector(caisse1.node()->getMesh(), caisse1.node()));
   selector.push_back(smgr->createTriangleSelector(hero.node()));
 
   Projectile proj = hero.shoot();
+
+  std::vector<Projectile> vect_proj;
+  vect_proj.push_back(proj);
+  collisionProj(vect_proj);
+
   //IAnimatedMesh* mesh = smgr->getMesh("./irrlicht-1.8.4/media/sydney.md2");
   // scene::IAnimatedMesh *meshq = smgr->getMesh("20kdm2.bsp");
   // scene::ISceneNode *nodeq = 0;
@@ -105,7 +113,8 @@ int main()
   //node->drop();
   //node = 0; // As I shouldn't refer to it again, ensure that I can't
 
-  device->getCursorControl()->setVisible(false);
+  device->getCursorControl()
+      ->setVisible(false);
   int lastFPS = -1;
 
   // In order to do framerate independent movement, we have to know
@@ -153,22 +162,20 @@ int main()
   std::vector<vec2> nodes = get_nodes_positions(Nx, Ny, obstacles, grid);
   Grid grid_nodes(Nx, Ny);
 
-  for (int k = 0; k < nodes.size(); k++)
+  for (long unsigned int k = 0; k < nodes.size(); k++)
   {
     grid_nodes(nodes[k].x, nodes[k].y) = 1;
   }
 
-  for (int i = 0; i < Nx; i++)
+  for (long unsigned int i = 0; i < Nx; i++)
   {
-    for (int j = 0; j < Ny; j++)
+    for (long unsigned int j = 0; j < Ny; j++)
     {
       std::cout << grid(i, j) + 2 * grid_nodes(i, j) << " ";
     }
     std::cout << std::endl;
   }
 
-
-  
   int k = 0;
   
   for (vec2 node_v : nodes)
@@ -179,17 +186,12 @@ int main()
   }
   
 
-  for (int k = 0; k < vec_nodes.size(); k++)
+  for (long unsigned int k = 0; k < vec_nodes.size(); k++)
   {
     vec_nodes[k].compute_neighbours(vec_nodes, grid);
   }
 
   map_paths = compute_all_paths(vec_nodes);
-
-
-
-
-  
 
   while (device->run())
   {
@@ -219,7 +221,7 @@ int main()
       lastFPS = fps;
     }
   }
-  
+
   device->drop();
 
   return 0;
