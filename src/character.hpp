@@ -24,12 +24,12 @@ public:
 
 private:
     // Attributs
+    irr::core::vector3df m_direction;
     float m_life;
     float m_baseDamage;
-    irr::core::vector3df m_position;
-    irr::core::vector3df m_direction;
     irr::scene::IAnimatedMesh *m_mesh;
     irr::scene::IAnimatedMeshSceneNode *m_node;
+    irr::core::vector3df m_position;
 };
 
 #endif

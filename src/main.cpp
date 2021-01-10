@@ -15,6 +15,7 @@
 #include "Path.hpp"
 #include "vec2.hpp"
 #include "Receiver.hpp"
+#include "collision.hpp"
 
 using namespace irr;
 using namespace core;
@@ -34,6 +35,7 @@ float dim_pix_x = 10.0f;
 float dim_pix_y = 10.0f;
 
 std::vector<irr::scene::ITriangleSelector *> selector;
+irr::scene::ISceneCollisionManager *collMan;
 
 int main()
 {
@@ -50,7 +52,7 @@ int main()
   //IGUIEnvironment* guienv = device->getGUIEnvironment();
 
   //smgr->addCameraSceneNodeFPS();
-  ICameraSceneNode *camera = smgr->addCameraSceneNode(0, vector3df(256.0f * 1 / 2, 256.0f * 0.8, 256.0f * 1 / 2), vector3df(255.0f * 1 / 2, 0, 256.0f * 1 / 2));
+  ICameraSceneNode *camera = smgr->addCameraSceneNode(0, vector3df(256.0f * 1 / 2, 256.0f * 0.8, 256.0f * 1 / 2), vector3df(255.0f * 1 / 2, 0, 256.0f * 1 / 2), ID_IsNotPickable);
   camera->setRotation(vector3df(32, 90, 90));
   camera->bindTargetAndRotation(true);
 
@@ -58,7 +60,7 @@ int main()
   // rect<s32>(10,10,260,22), true);
   device->getFileSystem()->addFileArchive("./irrlicht-1.8.4/media/map-20kdm2.pk3");
 
-  Terrain terain = Terrain("./irrlicht-1.8.4/media/terrain-heightmap.bmp", "./irrlicht-1.8.4/media/stones.jpg", vector3df(0.0f, 0.0f, 0.0f), vector3df(0, 0, 0), vector3df(1.0f, 0, 1.0f));
+  Terrain terrain = Terrain("./irrlicht-1.8.4/media/terrain-heightmap.bmp", "./irrlicht-1.8.4/media/stones.jpg", vector3df(0.0f, 0.0f, 0.0f), vector3df(0, 0, 0), vector3df(1.0f, 0, 1.0f));
   Caisse caisse = Caisse(vector2d<int>(10, 10), 10.0f);
   Caisse caisse1 = Caisse(vector2d<int>(120, 120), 10.0f);
   caisse1.scale(vector3df(3.0f, 1.0f, 1.0f));
@@ -70,6 +72,11 @@ int main()
   selector.push_back(smgr->createTriangleSelector(hero.node()));
 
   Projectile proj = hero.shoot();
+
+  std::vector<Projectile> vect_proj;
+  vect_proj.push_back(proj);
+  collisionProj(vect_proj);
+
   //IAnimatedMesh* mesh = smgr->getMesh("./irrlicht-1.8.4/media/sydney.md2");
   // scene::IAnimatedMesh *meshq = smgr->getMesh("20kdm2.bsp");
   // scene::ISceneNode *nodeq = 0;
@@ -92,7 +99,8 @@ int main()
   //node->drop();
   //node = 0; // As I shouldn't refer to it again, ensure that I can't
 
-  device->getCursorControl()->setVisible(false);
+  device->getCursorControl()
+      ->setVisible(false);
   int lastFPS = -1;
 
   // In order to do framerate independent movement, we have to know
@@ -140,14 +148,14 @@ int main()
   std::vector<vec2> nodes = get_nodes_positions(Nx, Ny, obstacles, grid);
   Grid grid_nodes(Nx, Ny);
 
-  for (int k = 0; k < nodes.size(); k++)
+  for (long unsigned int k = 0; k < nodes.size(); k++)
   {
     grid_nodes(nodes[k].x, nodes[k].y) = 1;
   }
 
-  for (int i = 0; i < Nx; i++)
+  for (long unsigned int i = 0; i < Nx; i++)
   {
-    for (int j = 0; j < Ny; j++)
+    for (long unsigned int j = 0; j < Ny; j++)
     {
       std::cout << grid(i, j) + 2 * grid_nodes(i, j) << " ";
     }
@@ -180,7 +188,7 @@ int main()
   start.compute_neighbours(vec_nodes, grid);
   end.compute_neighbours(vec_nodes, grid);
 
-  for (int k = 0; k < vec_nodes.size(); k++)
+  for (long unsigned int k = 0; k < vec_nodes.size(); k++)
   {
     vec_nodes[k].compute_neighbours(vec_nodes, grid);
   }

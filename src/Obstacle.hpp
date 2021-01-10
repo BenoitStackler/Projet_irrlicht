@@ -5,6 +5,22 @@
 #include <vector>
 #include <string>
 
+enum ID_Flag
+{
+    // I use this ISceneNode ID to indicate a scene node that is
+    // not pickable by getSceneNodeAndCollisionPointFromRay()
+    ID_IsNotPickable = 0,
+
+    // I use this flag in ISceneNode IDs to indicate that the
+    // scene node can be picked by ray selection.
+    IDFlag_IsPickable = 1 << 0,
+
+    // I use this flag in ISceneNode IDs to indicate that the
+    // scene node can be highlighted.  In this example, the
+    // homonids can be highlighted, but the level mesh can't.
+    IDFlag_IsHighlightable = 1 << 1
+};
+
 class Obstacle
 {
 public:
@@ -18,14 +34,14 @@ public:
 
     //Getters
     //Position de l'obstacle
-    const int x() const; //Getter de position en x de l'obstacle
-    const int y() const; //Getter de position en y de l'obstacle
+    int x() const; //Getter de position en x de l'obstacle
+    int y() const; //Getter de position en y de l'obstacle
 
     //Dimensions de l'obstacle
-    const int nx() const; //Getter de dimension en x de l'obstacle
-    const int ny() const; //Getter de dimension en y de l'obstacle
+    int nx() const; //Getter de dimension en x de l'obstacle
+    int ny() const; //Getter de dimension en y de l'obstacle
 
-    const int id() const; //Getter d'id de l'obstacle
+    int id() const; //Getter d'id de l'obstacle
 
     irr::scene::IMeshSceneNode *const node();
 
