@@ -53,6 +53,11 @@ irr::core::vector3df const Character::direction() const
     return m_direction;
 }
 
+irr::scene::IAnimatedMeshSceneNode *const Character::node()
+{
+    return m_node;
+}
+
 void Character::position(irr::core::vector3df position)
 {
     m_position = position;
