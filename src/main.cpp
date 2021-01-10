@@ -38,7 +38,6 @@ float dim_pix_y = 10.0f;
 Grid grid;
 std::vector<Node_Graph> vec_nodes;
 Hero hero;
-std::map<std::string, Path> map_paths;
 
 std::vector<irr::scene::ITriangleSelector *> selector;
 irr::scene::ISceneCollisionManager *collMan;
@@ -77,7 +76,7 @@ int main()
   Mur murW = Mur(0, 0, 89, 1);
 
   //caisse1.scale(vector3df(3.0f, 1.0f, 1.0f));
-  hero = Hero("./irrlicht-1.8.4/media/sydney.md2", "./irrlicht-1.8.4/media/sydney.bmp", vector3di(50, 0, 50), vector3df(0, 0, 0), 200.0f, 20.0f);
+  hero = Hero("./irrlicht-1.8.4/media/sydney.md2", "./irrlicht-1.8.4/media/sydney.bmp", vector3di(45, 0, 45), vector3df(0, 0, 0), 200.0f, 20.0f);
   world.defHero(&hero);
   std::vector<Enemy> enemies = create_enemy(hero);
 
@@ -86,7 +85,7 @@ int main()
   selector.push_back(smgr->createTriangleSelector(hero.node()));
 
   Projectile proj = hero.shoot();
-  world.addProjectile(&proj);
+  //world.addProjectile(&proj);
 
   std::vector<Projectile> vect_proj;
   vect_proj.push_back(proj);
@@ -157,6 +156,10 @@ int main()
   obstacles.push_back(obst2);
   obstacles.push_back(obst3);
   obstacles.push_back(obst4);
+  obstacles.push_back(murN);
+  obstacles.push_back(murS);
+  obstacles.push_back(murE);
+  obstacles.push_back(murW);
 
   grid = create_grid_obstacles(Nx, Ny, obstacles);
 
@@ -168,15 +171,6 @@ int main()
     grid_nodes(nodes[k].x, nodes[k].y) = 1;
   }
 
-  for (long unsigned int i = 0; i < Nx; i++)
-  {
-    for (long unsigned int j = 0; j < Ny; j++)
-    {
-      std::cout << grid(i, j) + 2 * grid_nodes(i, j) << " ";
-    }
-    std::cout << std::endl;
-  }
-
   int k = 0;
 
   for (vec2 node_v : nodes)
@@ -186,12 +180,6 @@ int main()
     ++k;
   }
 
-  for (long unsigned int k = 0; k < vec_nodes.size(); k++)
-  {
-    vec_nodes[k].compute_neighbours(vec_nodes, grid);
-  }
-
-  map_paths = compute_all_paths(vec_nodes);
 
   while (device->run())
   {

@@ -40,57 +40,48 @@ Projectile Hero::shoot()
 {
         irr::core::vector3df pos_souris = irr::core::vector3df(x_souris, 0.0f, y_souris);
         direction(pos_souris - position());
-        std::cout << " x : " << position().X << " y : " << position().Y << " z : " << position().Z << std::endl;
         return Projectile(this, 1.0f, baseDamage());
 }
 
+
 void Hero::compute_movements(float x_dest, float y_dest)
 {
-        std::cout << "Start Compute Movement" << std::endl;
         movement_positions.clear();
 
         irr::core::vector3df current_pos = position();
         irr::core::vector2di pos_grid_start = pix_to_grid(current_pos);
 
-        std::cout << "Grid start : " << pos_grid_start.X << ", " << pos_grid_start.Y << std::endl;
         irr::core::vector2di pos_grid_dest = pix_to_grid(irr::core::vector3df(x_dest, current_pos.Y, y_dest));
-        std::cout << "Grid start : " << pos_grid_dest.X << ", " << pos_grid_dest.Y << std::endl;
 
         Node_Graph closest_start = find_closest_node(pos_grid_start.X, pos_grid_start.Y, pos_grid_dest.X, pos_grid_dest.Y, vec_nodes);
         Node_Graph closest_dest = find_closest_node(pos_grid_dest.X, pos_grid_dest.Y, pos_grid_start.X, pos_grid_start.Y, vec_nodes);
 
-        if (closest_start.number() == -1 || closest_dest.number() == -1)
+        Node_Graph start_node(pos_grid_start.X, pos_grid_start.Y, vec_nodes.back().number() +1);
+        Node_Graph target_node(pos_grid_dest.X, pos_grid_dest.Y, vec_nodes.back().number() +2);
+
+        std::vector<Node_Graph> Graph;
+        for (auto node : vec_nodes)
         {
-                irr::core::vector3df start = current_pos;
-                irr::core::vector3df dest = irr::core::vector3df(x_dest, current_pos.Y, y_dest); //grid_to_pix(pos_grid_dest);
-                compute_mvt(start, dest);
+                Graph.push_back(node);
         }
-        else
+        Graph.push_back(start_node);
+        Graph.push_back(target_node);
+
+        for (int k = 0; k < Graph.size() ; k++)
         {
-
-                compute_mvt_to_grid(current_pos, closest_start);
-
-                std::string name = "";
-                name += std::to_string(closest_start.number());
-                name += "-";
-                name += std::to_string(closest_dest.number());
-
-                std::map<std::string, Path>::iterator path_it = map_paths.find(name);
-
-                std::string s = path_it->first;
-
-                Path path = path_it->second;
-
-                for (int k = 1; k < path.path().size(); k++)
-                {
-                        compute_mvt_grid(path.path()[k - 1], path.path()[k]);
-                }
-                irr::core::vector3df dest = irr::core::vector3df(x_dest, current_pos.Y, y_dest); //grid_to_pix(pos_grid_dest);
-
-                compute_mvt_from_grid(dest, closest_dest);
+                Graph[k].compute_neighbours(Graph, grid);
         }
 
-        std::cout << "End Compute Movement" << std::endl;
+
+        Path path = find_path(Graph, Graph[Graph.size() - 2], Graph[Graph.size() - 1]);
+
+
+        for (int k = 1 ; k < path.path().size() ; k++)
+        {
+                compute_mvt_grid(path.path()[k-1], path.path()[k]);
+        }
+        
+
 }
 
 void Hero::compute_mvt_to_grid(irr::core::vector3df pos, Node_Graph closest_start)
@@ -101,6 +92,7 @@ void Hero::compute_mvt_to_grid(irr::core::vector3df pos, Node_Graph closest_star
         irr::core::vector3df coords_px_node = grid_to_pix(coords_grid_node);
         compute_mvt(pos, coords_px_node);
 }
+
 
 void Hero::compute_mvt_grid(Node_Graph closest_start, Node_Graph closest_dest)
 {
@@ -115,6 +107,7 @@ void Hero::compute_mvt_grid(Node_Graph closest_start, Node_Graph closest_dest)
         compute_mvt(coords_px_node_start, coords_px_node_dest);
 }
 
+
 void Hero::compute_mvt_from_grid(irr::core::vector3df pos, Node_Graph closest_dest)
 {
         irr::core::vector2di coords_grid_node;
@@ -124,21 +117,24 @@ void Hero::compute_mvt_from_grid(irr::core::vector3df pos, Node_Graph closest_de
         compute_mvt(coords_px_node, pos);
 }
 
+
 void Hero::compute_mvt(irr::core::vector3df start, irr::core::vector3df dest)
 {
-        float dx = (dest.X - start.X);
-        float dy = (dest.Z - start.Z);
-        float norm_dx_dy = sqrt(pow(dx, 2) + pow(dy, 2));
+        float dx =(dest.X - start.X);
+        float dy =(dest.Z - start.Z);
+        float norm_dx_dy = sqrt(pow(dx,2) + pow(dy,2));
 
         if (norm_dx_dy != 0.0f)
         {
                 dx /= norm_dx_dy;
                 dy /= norm_dx_dy;
 
-                for (int i = 0; i < norm_dx_dy; i++)
+                for (int i = 0 ; i < norm_dx_dy ; i++)
                 {
-                        movement_positions.push_back(irr::core::vector3df(start.X + i * dx, start.Y, start.Z + i * dy));
+                        movement_positions.push_back(irr::core::vector3df(start.X + i*dx, start.Y, start.Z + i*dy));
                 }
-                movement_positions.push_back(irr::core::vector3df(start.X + norm_dx_dy * dx, start.Y, start.Z + norm_dx_dy * dy));
+                movement_positions.push_back(irr::core::vector3df(start.X + norm_dx_dy*dx, start.Y, start.Z + norm_dx_dy*dy));
         }
 }
+
+

@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(irrlicht_CPE LANGUAGES CXX)
+project(game LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
@@ -33,12 +33,12 @@ elseif (APPLE)
 elseif (UNIX)
   link_directories(${CMAKE_SOURCE_DIR}/irrlicht-1.8.4/lib/Linux/)
   set(LINK_FLAGS Irrlicht GL Xxf86vm Xext X11 Xcursor )
-  add_definitions(-g -Wall -Wextra -Wno-comment -Wno-unused-parameter -Wno-unused-function -Wno-unused-variable)
+  add_definitions(-g)
 endif ()
 
-add_executable(irrlicht_CPE ${source_files} ${header_files})
-#target_link_libraries(irrlicht_CPE  ${LINK_FLAGS} ${IRRLICHT_LIBRARY})
-target_link_libraries(irrlicht_CPE  ${LINK_FLAGS} ${OPENGL_LIBRARIES})
+add_executable(game ${source_files} ${header_files})
+#target_link_libraries(game  ${LINK_FLAGS} ${IRRLICHT_LIBRARY})
+target_link_libraries(game  ${LINK_FLAGS} ${OPENGL_LIBRARIES})
 
-set_target_properties(irrlicht_CPE PROPERTIES  VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
-set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT irrlicht_CPE)
+set_target_properties(game PROPERTIES  VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+set_property(DIRECTORY PROPERTY VS_STARTUP_PROJECT game)

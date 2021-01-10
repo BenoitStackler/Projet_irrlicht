@@ -35,7 +35,7 @@ std::vector<Node_Graph> const& Node_Graph::tested_neighbours(){
     return tested_neighbours_data;
 }
 
-int const Node_Graph::number(){
+int const Node_Graph::number() const {
     return node_number_data;
 }
 

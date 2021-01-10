@@ -21,7 +21,7 @@ class Node_Graph
         int const size_neighbours();
         std::vector<Node_Graph> const& neighbours();
         std::vector<Node_Graph> const& tested_neighbours();
-        int const number();
+        int const number() const;
 
         void set_neighbour(const std::vector<Node_Graph>& neighbours);
         void set_tested_neighbour(const std::vector<Node_Graph>& neighbours);
