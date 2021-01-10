@@ -10,7 +10,7 @@ class Mur : public Obstacle
 {
 
     public:
-        //Mur();
+        Mur();
         Mur(irr::core::vector2d<int> pos, irr::f32 size);
         Mur(irr::core::vector2d<int> pos, irr::f32 size, irr::core::vector3df rot);
 

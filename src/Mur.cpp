@@ -1,7 +1,7 @@
 #include "Mur.hpp"
 
 
-//Mur::Mur() : Obstacle() {}
+Mur::Mur() : Obstacle() {}
 
 Mur::Mur(irr::core::vector2d<int> pos, irr::f32 size)  
 {

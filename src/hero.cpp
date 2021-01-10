@@ -43,24 +43,25 @@ Projectile Hero::shoot()
         return Projectile(this, 1.0f, baseDamage());
 }
 
-void Hero::compute_movements(int x_dest, int y_dest)
+void Hero::compute_movements(float x_dest, float y_dest)
 {
         std::cout << "Start Compute Movement" << std::endl;
         movement_positions.clear();
 
         irr::core::vector3df current_pos = position();
-        std::cout << "Current pos : " << current_pos.X << ',' << current_pos.Z << std::endl;
         irr::core::vector2di pos_grid_start = pix_to_grid(current_pos);
+
+        std::cout << "Grid start : " << pos_grid_start.X << ", " << pos_grid_start.Y << std::endl;
         irr::core::vector2di pos_grid_dest = pix_to_grid(irr::core::vector3df(x_dest, current_pos.Y, y_dest));
+        std::cout << "Grid start : " << pos_grid_dest.X << ", " << pos_grid_dest.Y << std::endl;
+
         Node_Graph closest_start = find_closest_node(pos_grid_start.X, pos_grid_start.Y, pos_grid_dest.X, pos_grid_dest.Y, vec_nodes);
         Node_Graph closest_dest = find_closest_node(pos_grid_dest.X, pos_grid_dest.Y, pos_grid_start.X, pos_grid_start.Y, vec_nodes);
 
         if (closest_start.number() == -1 || closest_dest.number() == -1)
         {
                 irr::core::vector3df start = current_pos;
-                irr::core::vector3df dest = irr::core::vector3df(x_dest, start.Y, y_dest);
-                std::cout << start.X << ',' << start.Z << std::endl;
-                std::cout << dest.X << ',' << dest.Z << std::endl;
+                irr::core::vector3df dest = irr::core::vector3df(x_dest, current_pos.Y, y_dest); //grid_to_pix(pos_grid_dest);
                 compute_mvt(start, dest);
         }
         else
@@ -87,16 +88,14 @@ void Hero::compute_movements(int x_dest, int y_dest)
                 std::cout << "5" << std::endl;
                 std::cout << map_paths.size() << std::endl;
                 std::string s = path_it->first;
-                std::cout << s << std::endl;
 
-                std::cout << "6" << std::endl;
                 Path path = path_it->second;
 
                 for (int k = 1; k < path.path().size(); k++)
                 {
                         compute_mvt_grid(path.path()[k - 1], path.path()[k - 1]);
                 }
-                std::cout << "7" << std::endl;
+                irr::core::vector3df dest = irr::core::vector3df(x_dest, current_pos.Y, y_dest); //grid_to_pix(pos_grid_dest);
 
                 compute_mvt_from_grid(current_pos, closest_start);
         }

@@ -2,14 +2,15 @@
 #include "hero.hpp"
 #include "world.hpp"
 
+
 extern irr::video::IVideoDriver *driver;
 extern irr::scene::ISceneManager *smgr;
 extern irr::IrrlichtDevice *device;
 extern Hero hero;
 extern World world;
 
-irr::s32 x_souris;
-irr::s32 y_souris;
+float x_souris;
+float y_souris;
 bool is_right_click_up;
 
 // This is the one method that we have to implement

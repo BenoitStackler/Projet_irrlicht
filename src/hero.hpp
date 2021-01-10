@@ -15,7 +15,7 @@ public:
     Hero(const irr::io::path &filename, const irr::io::path &textname, irr::core::vector3di position, irr::core::vector3df direction, float life, float baseDamage);
     Hero(const irr::io::path &filename, const irr::io::path &textname);
 
-    void compute_movements(int x_dest, int y_dest);
+    void compute_movements(float x_dest, float y_dest);
     void move();
     Projectile shoot();
 
