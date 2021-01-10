@@ -18,6 +18,7 @@
 #include "Receiver.hpp"
 #include "collision.hpp"
 #include "world.hpp"
+#include "utils.hpp"
 
 using namespace irr;
 using namespace core;
@@ -42,6 +43,8 @@ Hero hero;
 std::vector<irr::scene::ITriangleSelector *> selector;
 irr::scene::ISceneCollisionManager *collMan;
 World world;
+bool EndGame = false;
+bool Win = false;
 
 int main()
 {
@@ -76,7 +79,7 @@ int main()
   Mur murW = Mur(0, 0, 89, 1);
 
   //caisse1.scale(vector3df(3.0f, 1.0f, 1.0f));
-  hero = Hero("./irrlicht-1.8.4/media/sydney.md2", "./irrlicht-1.8.4/media/sydney.bmp", vector3di(45, 0, 45), vector3df(0, 0, 0), 200.0f, 20.0f);
+  hero = Hero("./irrlicht-1.8.4/media/sydney.md2", "./irrlicht-1.8.4/media/sydney.bmp", vector3di(45, 0, 45), vector3df(0, 0, 0), 50.0f, 20.0f);
   world.defHero(&hero);
   std::vector<Enemy> enemies = create_enemy(hero);
 
@@ -164,6 +167,15 @@ int main()
   obstacles.push_back(murE);
   obstacles.push_back(murW);
 
+  world.addObstacle(&obst1);
+  world.addObstacle(&obst2);
+  world.addObstacle(&obst3);
+  world.addObstacle(&obst4);
+  world.addObstacle(&murN);
+  world.addObstacle(&murW);
+  world.addObstacle(&murE);
+  world.addObstacle(&murS);
+
   grid = create_grid_obstacles(Nx, Ny, obstacles);
 
   std::vector<vec2> nodes = get_nodes_positions(Nx, Ny, obstacles, grid);
@@ -183,7 +195,7 @@ int main()
     ++k;
   }
 
-  while (device->run())
+  while (device->run() && !EndGame)
   {
     keyControl(receiver);
     // Work out a frame delta time.
@@ -198,7 +210,9 @@ int main()
       proj->move();
     }
 
-    collisionProj(world.getProjectiles());
+    compute_collisions(&world);
+
+    //collisionProj(world.getProjectiles());
     smgr->drawAll();
 
     driver->endScene();

@@ -6,7 +6,6 @@
 #include "character.hpp"
 #include <vector>
 #include "Hero.hpp"
-#include "utils.hpp"
 
 class Enemy : public Character
 {

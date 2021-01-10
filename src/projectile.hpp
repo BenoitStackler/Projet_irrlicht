@@ -19,6 +19,7 @@ public:
 
     irr::core::vector3df position();
     irr::core::vector3df direction();
+    irr::scene::ISceneNode* node();
 
 private:
     // Attributs

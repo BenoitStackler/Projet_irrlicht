@@ -35,6 +35,11 @@ Projectile::Projectile()
 {
 }
 
+irr::scene::ISceneNode * Projectile::node()
+{
+    return m_node;
+}
+
 void Projectile::impact()
 {
 }

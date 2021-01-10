@@ -13,12 +13,12 @@ class Character
     Character(const irr::io::path&  filename, const irr::io::path&  textname, irr::core::vector3di position, irr::core::vector3df direct, float life, float baseDamage);
     Character(const irr::io::path&  filename, const irr::io::path&  textname);
 
-    void impact();
+    int impact();
     void move();
     Projectile shoot();
     irr::core::vector3df const position() const;
     irr::core::vector3df const direction() const;
-    irr::scene::IAnimatedMeshSceneNode *const node();
+    irr::scene::IAnimatedMeshSceneNode * node();
 
     void position(irr::core::vector3df position);
     void direction(irr::core::vector3df direction);

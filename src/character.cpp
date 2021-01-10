@@ -43,8 +43,18 @@ float const Character::baseDamage() const
     return m_baseDamage;
 }
 
-void Character::impact()
+int Character::impact()
 {
+    m_life -= 10.0f;
+    if (m_life <= 0.0f)
+    {
+        return 1;
+    }
+    else
+    {
+        return 0;
+    }
+    
 }
 
 void Character::move()
@@ -66,7 +76,7 @@ irr::core::vector3df const Character::direction() const
     return m_direction;
 }
 
-irr::scene::IAnimatedMeshSceneNode *const Character::node()
+irr::scene::IAnimatedMeshSceneNode * Character::node()
 {
     return m_node;
 }
