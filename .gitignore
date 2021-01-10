@@ -4944,3 +4944,6 @@ build/CMakeFiles/irrlicht_CPE.dir/src/world.cpp.o
 build/CMakeFiles/irrlicht_CPE.dir/src/utils.cpp.o
 build/CMakeFiles/irrlicht_CPE.dir/src/utils.cpp.o
 build/CMakeFiles/irrlicht_CPE.dir/src/utils.cpp.o
+build/CMakeFiles/irrlicht_CPE.dir/src/utils.cpp.o
+*.o
+*.o

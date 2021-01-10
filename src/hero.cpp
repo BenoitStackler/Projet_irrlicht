@@ -74,30 +74,19 @@ void Hero::compute_movements(float x_dest, float y_dest)
                 name += "-";
                 name += std::to_string(closest_dest.number());
 
-                std::cout << "Beginning : " << &*map_paths.begin() << " / End : " << &*map_paths.end() << std::endl;
-                std::map<std::string, Path>::iterator path_it = map_paths.begin();
-                while (path_it != map_paths.end())
-                {
-                        std::cout << path_it->first << std::endl;
-                        std::cout << "A" << std::endl;
-                        path_it++;
-                }
+                std::map<std::string, Path>::iterator path_it = map_paths.find(name);
 
-                path_it = map_paths.find(name); //   (<find_path(vec_nodes, closest_start, closest_dest);
-                path_it = map_paths.begin();    //   (<find_path(vec_nodes, closest_start, closest_dest);
-                std::cout << "5" << std::endl;
-                std::cout << map_paths.size() << std::endl;
                 std::string s = path_it->first;
 
                 Path path = path_it->second;
 
                 for (int k = 1; k < path.path().size(); k++)
                 {
-                        compute_mvt_grid(path.path()[k - 1], path.path()[k - 1]);
+                        compute_mvt_grid(path.path()[k - 1], path.path()[k]);
                 }
                 irr::core::vector3df dest = irr::core::vector3df(x_dest, current_pos.Y, y_dest); //grid_to_pix(pos_grid_dest);
 
-                compute_mvt_from_grid(current_pos, closest_start);
+                compute_mvt_from_grid(dest, closest_dest);
         }
 
         std::cout << "End Compute Movement" << std::endl;
@@ -139,10 +128,16 @@ void Hero::compute_mvt(irr::core::vector3df start, irr::core::vector3df dest)
         float dx = (dest.X - start.X);
         float dy = (dest.Z - start.Z);
         float norm_dx_dy = sqrt(pow(dx, 2) + pow(dy, 2));
-        dx /= norm_dx_dy;
-        dy /= norm_dx_dy;
-        for (int i = 0; i < norm_dx_dy; i++)
+
+        if (norm_dx_dy != 0.0f)
         {
-                movement_positions.push_back(irr::core::vector3df(start.X + i * dx, start.Y, start.Z + i * dy));
+                dx /= norm_dx_dy;
+                dy /= norm_dx_dy;
+
+                for (int i = 0; i < norm_dx_dy; i++)
+                {
+                        movement_positions.push_back(irr::core::vector3df(start.X + i * dx, start.Y, start.Z + i * dy));
+                }
+                movement_positions.push_back(irr::core::vector3df(start.X + norm_dx_dy * dx, start.Y, start.Z + norm_dx_dy * dy));
         }
 }
