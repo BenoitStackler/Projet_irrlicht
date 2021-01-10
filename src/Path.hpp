@@ -5,7 +5,6 @@
 #include <string>
 #include <map>
 #include "Node_Graph.hpp"
-#include "vec2Node.hpp"
 
 
 class Path

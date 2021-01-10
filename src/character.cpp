@@ -87,21 +87,27 @@ void Character::position(irr::core::vector3df position)
     m_node->setPosition(position);
 }
 
-void Character::direction(irr::core::vector3df direction)
+void Character::direction(irr::core::vector3df dir)
 {
-    direction.normalize();
-    m_direction = direction;
-    irr::core::vector3df cross = direction.crossProduct(irr::core::vector3df(0.0f, 0.0f, 1.0f));
-    float cos_angle = direction.dotProduct(irr::core::vector3df(0.0f, 0.0f, 1.0f));
+    dir.normalize();
+    m_direction = dir;
+    irr::core::vector3df cross = dir.crossProduct(irr::core::vector3df(0.0f, 0.0f, 1.0f));
+    float cos_angle = dir.dotProduct(irr::core::vector3df(0.0f, 0.0f, 1.0f));
     float angle;
 
     if (cross.Y < 0)
     {
-        angle = -acos(cos_angle);
+        angle = 3*M_PI/2 + acos(cos_angle);
     }
     else
     {
-        angle = +acos(cos_angle);
+        angle = 3*M_PI/2 - acos(cos_angle);
     }
     m_node->setRotation(irr::core::vector3df(0.0f, angle * 180 / M_PI, 0.0f));
+}
+
+void Character::lookat(irr::core::vector3df target)
+{
+    direction(target -  position());
+    
 }

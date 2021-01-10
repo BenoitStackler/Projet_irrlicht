@@ -16,6 +16,7 @@ extern std::vector<Node_Graph> vec_nodes;
 extern std::map<std::string, Path> map_paths;
 extern float x_souris;
 extern float y_souris;
+extern World world;
 
 Hero::Hero() {}
 
@@ -33,6 +34,7 @@ void Hero::move()
         {
                 position(movement_positions[0]);
                 movement_positions.erase(movement_positions.begin());
+
         }
 }
 

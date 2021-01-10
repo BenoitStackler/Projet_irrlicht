@@ -118,15 +118,12 @@ void compute_collisions()
                     auto pos_obst_NW = grid_to_pix(index_NW);
                     auto pos_obst_SE = grid_to_pix(index_SE);
 
-                    //std::cout << pos_obst_SE.X << std::endl;
                     if (proj_ptr->position().X > pos_obst_NW.X && 
                         proj_ptr->position().X < pos_obst_SE.X && 
                         proj_ptr->position().Z > pos_obst_NW.Z && 
                         proj_ptr->position().Z < pos_obst_SE.Z)
 
-                    //float dist = sqrt(pow((proj_ptr)->position().X - pos_obst.X, 2) + pow((proj_ptr)->position().Z - pos_obst.Z, 2));
-                    //std::cout << pos_obst.X << std::endl;
-                    //if (dist < dist_collide + 10.0f)
+
                     {
                         collision_found = true;
                         (proj_ptr)->node()->remove();

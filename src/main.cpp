@@ -16,7 +16,6 @@
 #include "Path.hpp"
 #include "vec2.hpp"
 #include "Receiver.hpp"
-#include "collision.hpp"
 #include "world.hpp"
 #include "utils.hpp"
 
@@ -58,23 +57,16 @@ int main()
 
   driver = device->getVideoDriver();
   smgr = device->getSceneManager();
-  //IGUIEnvironment* guienv = device->getGUIEnvironment();
 
-  //smgr->addCameraSceneNodeFPS();
   ICameraSceneNode *camera = smgr->addCameraSceneNode(0, vector3df(940.0f / 2, 645.0f, 940.0f / 2), vector3df(938.0f / 2, 0, 940.0f / 2));
-  // camera->setRotation(vector3df(32, 90, 90));
   camera->bindTargetAndRotation(true);
 
-  // guienv->addStaticText(L"Hello World! This is the Irrlicht Software renderer!",
-  // rect<s32>(10,10,260,22), true);
   device->getFileSystem()->addFileArchive("./irrlicht-1.8.4/media/map-20kdm2.pk3");
 
   Terrain terain = Terrain("./irrlicht-1.8.4/media/terrain-heightmap.bmp", "./irrlicht-1.8.4/media/3.jpg", vector3df(0.0f, 0.0f, 0.0f), vector3df(0, 0, 0), vector3df(1000.0f / 256.0f, 0, 1000.0f / 256.0f));
   Caisse caisse = Caisse(vector2d<int>(0, 0), 10.0f);
   Caisse caisse1 = Caisse(vector2d<int>(89, 89), 10.0f);
 
-
-  //caisse1.scale(vector3df(3.0f, 1.0f, 1.0f));
   hero = Hero("./irrlicht-1.8.4/media/sydney.md2", "./irrlicht-1.8.4/media/sydney.bmp", vector3di(45, 0, 45), vector3df(0, 0, 0), 50.0f, 20.0f);
   world.defHero(&hero);
   std::vector<Enemy> enemies = create_enemy(hero);
@@ -95,41 +87,12 @@ int main()
     selector.push_back(smgr->createTriangleSelector(e.node()));
   }
 
-  // std::vector<Projectile> vect_proj;
-  // vect_proj.push_back(proj);
-
-  //IAnimatedMesh* mesh = smgr->getMesh("./irrlicht-1.8.4/media/sydney.md2");
-  // scene::IAnimatedMesh *meshq = smgr->getMesh("20kdm2.bsp");
-  // scene::ISceneNode *nodeq = 0;
-
-  // if (meshq)
-  // {
-  //   nodeq = smgr->addOctreeSceneNode(meshq->getMesh(0), 0, -1, 1024);
-  // }
-  // if (nodeq)
-  //   nodeq->setPosition(core::vector3df(-1300, -144, -1249));
-
-  //  scene::ISceneNodeAnimator* anim = smgr->createRotationAnimator(core::vector3df(0.8f, 0, 0.8f));
-
-  //   if(anim)
-  //   {
-  //       node->addAnimator(anim);
-  //       anim->drop();
-  //       anim = 0;
-  //   }
-  //node->drop();
-  //node = 0; // As I shouldn't refer to it again, ensure that I can't
 
   device->getCursorControl()
       ->setVisible(false);
   int lastFPS = -1;
 
-  // In order to do framerate independent movement, we have to know
-  // how long it was since the last frame
   u32 then = device->getTimer()->getTime();
-
-  // This is the movemen speed in units per second.
-  const f32 MOVEMENT_SPEED = 40.f;
 
   int Nx = 90;
   int Ny = 90;
@@ -179,8 +142,6 @@ int main()
     vec_nodes.push_back(*node);
     ++k;
   }
-
-
 
 
   std::cout << std::endl;
@@ -235,7 +196,6 @@ int main()
     }
 
 
-    //collisionProj(world.getProjectiles());
     smgr->drawAll();
 
     driver->endScene();

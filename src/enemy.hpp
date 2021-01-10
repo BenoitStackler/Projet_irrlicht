@@ -15,6 +15,7 @@ public:
     Enemy();
 
     Projectile shoot();
+
 };
 
 std::vector<Enemy> create_enemy(Hero hero);

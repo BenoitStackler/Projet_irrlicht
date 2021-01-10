@@ -50,7 +50,7 @@ Receiver::Receiver()
 
 void keyControl(Receiver receiver)
 {
-    hero.direction(irr::core::vector3df(y_souris, hero.position().Y, x_souris) - hero.position());
+    hero.direction(irr::core::vector3df(x_souris, hero.position().Y, y_souris) - hero.position());
     if (receiver.IsKeyDown(irr::KEY_RBUTTON))
     {
         if (is_right_click_up)

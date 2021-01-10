@@ -25,6 +25,8 @@ class Character
 
     float const life() const;
     float const baseDamage() const;
+
+    void lookat(irr::core::vector3df target);
     
 
     private :
