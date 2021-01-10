@@ -4933,3 +4933,6 @@ irrlicht-1.8.4/tools/MeshConverter/MeshConverter_v9.vcproj
 irrlicht-1.8.4/tools/MeshConverter/MeshConverter_vc10.vcxproj
 irrlicht-1.8.4/tools/MeshConverter/MeshConverter_vc11.vcxproj
 irrlicht-1.8.4/tools/MeshConverter/MeshConverter_vc12.vcxproj
+irrlicht-1.8.4/media/text1.jpg
+irrlicht-1.8.4/media/1.jpg
+build/CMakeFiles/irrlicht_CPE.dir/src/Receiver.cpp.o

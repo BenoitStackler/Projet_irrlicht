@@ -18,8 +18,6 @@ class Mur : public Obstacle
         Mur(int pos_x, int pos_y, int nx_param, int ny_param); 
 
         std::string type();
-        void draw();
-
 
 };
 

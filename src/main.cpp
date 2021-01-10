@@ -15,6 +15,8 @@
 #include "Node_Graph.hpp"
 #include "Path.hpp"
 #include "vec2.hpp"
+#include "Receiver.hpp"
+
 using namespace irr;
 using namespace core;
 using namespace scene;
@@ -33,42 +35,16 @@ float dim_pix_x = 10.0f;
 float dim_pix_y = 10.0f;
 Grid grid;
 std::vector<Node_Graph> vec_nodes;
+Hero hero;
+std::map<std::string, Path> map_paths;
 
 
-class MyEventReceiver : public IEventReceiver
-{
-public:
-  // This is the one method that we have to implement
-  virtual bool OnEvent(const SEvent &event)
-  {
-    // Remember whether each key is down or up
-    if (event.EventType == irr::EET_KEY_INPUT_EVENT)
-      KeyIsDown[event.KeyInput.Key] = event.KeyInput.PressedDown;
-
-    return false;
-  }
-
-  // This is used to check whether a key is being held down
-  virtual bool IsKeyDown(EKEY_CODE keyCode) const
-  {
-    return KeyIsDown[keyCode];
-  }
-
-  MyEventReceiver()
-  {
-    for (u32 i = 0; i < KEY_KEY_CODES_COUNT; ++i)
-      KeyIsDown[i] = false;
-  }
-
-private:
-  // We use this array to store the current state of each key
-  bool KeyIsDown[KEY_KEY_CODES_COUNT];
-};
 
 int main()
 {
   // create device
-  MyEventReceiver receiver;
+  Receiver receiver;
+
   device = createDevice(video::EDT_OPENGL, dimension2d<u32>(1000, 1000), 16, false, false, false, &receiver);
   if (!device)
     return 1;
@@ -97,7 +73,7 @@ int main()
   Mur murW = Mur(0,0,89,1);
 
   //caisse1.scale(vector3df(3.0f, 1.0f, 1.0f));
-  Hero hero = Hero("./irrlicht-1.8.4/media/sydney.md2", "./irrlicht-1.8.4/media/sydney.bmp", vector3di(0, 0, 0), vector3df(0, 0, 0), 200.0f, 20.0f);
+  hero = Hero("./irrlicht-1.8.4/media/sydney.md2", "./irrlicht-1.8.4/media/sydney.bmp", vector3di(50, 0, 50), vector3df(0, 0, 0), 200.0f, 20.0f);
   std::vector<Enemy> enemies = create_enemy(3, hero);
 
   Projectile proj = hero.shoot();
@@ -133,7 +109,6 @@ int main()
   // This is the movemen speed in units per second.
   const f32 MOVEMENT_SPEED = 40.f;
 
-
   int Nx = 10;
   int Ny = 10;
 
@@ -161,7 +136,6 @@ int main()
   obst4.nx(2);
   obst4.ny(2);
 
-
   std::vector<Obstacle> obstacles;
   obstacles.push_back(obst1);
   obstacles.push_back(obst2);
@@ -170,76 +144,57 @@ int main()
 
   grid = create_grid_obstacles(Nx, Ny, obstacles);
 
-
-
   std::vector<vec2> nodes = get_nodes_positions(Nx, Ny, obstacles, grid);
   Grid grid_nodes(Nx, Ny);
 
-  for (int k = 0 ; k < nodes.size() ; k++){
-      grid_nodes(nodes[k].x, nodes[k].y) = 1;
+  for (int k = 0; k < nodes.size(); k++)
+  {
+    grid_nodes(nodes[k].x, nodes[k].y) = 1;
   }
 
-  for (int i = 0 ; i < Nx ; i++){
-      for (int j = 0 ; j < Ny ; j++){
-          std::cout << grid(i, j) + 2*grid_nodes(i, j) << " " ;
-
-      }
-      std::cout << std::endl;
+  for (int i = 0; i < Nx; i++)
+  {
+    for (int j = 0; j < Ny; j++)
+    {
+      std::cout << grid(i, j) + 2 * grid_nodes(i, j) << " ";
+    }
+    std::cout << std::endl;
   }
-
-  vec2 p0;
-  vec2 p1;
-  p0.x = 0;
-  p1.x = 2;
-  p0.y = 3;
-  p1.y = 5;
-
-  auto c = bresenham(p0, p1);
-
 
 
   
   int k = 0;
-  for (vec2 node_v : nodes){
-      vec_nodes.push_back(Node_Graph(node_v.x, node_v.y, k));
-      ++k;
-  } 
-  Node_Graph start(7, 4, k);
-  ++k;
-  Node_Graph end(1, 9, k);
+  /*
+  for (vec2 node_v : nodes)
+  {
+    Node_Graph* node = new Node_Graph(node_v.x, node_v.y, k);
+    vec_nodes.push_back(*node);
+    ++k;
+  }
+  */
 
-
-  vec_nodes.push_back(end);
-  vec_nodes.push_back(start);
-
-  start.compute_neighbours(vec_nodes, grid);
-  end.compute_neighbours(vec_nodes, grid);
-
-  for (int k = 0 ; k < vec_nodes.size() ; k++){
-      vec_nodes[k].compute_neighbours(vec_nodes, grid);
+  for (int k = 0; k < vec_nodes.size(); k++)
+  {
+    vec_nodes[k].compute_neighbours(vec_nodes, grid);
   }
 
-  int s = vec_nodes.size();
-
-  Path foundPath = find_path(vec_nodes, start, end);
-
-  for (Node_Graph node : foundPath.path()){
-      std::cout << '(' << node.x() << ',' << node.y() <<')' << std::endl;
-  }
+  map_paths = compute_all_paths(vec_nodes);
 
 
 
 
-
+  
 
   while (device->run())
   {
+    keyControl(receiver);
     // Work out a frame delta time.
     const u32 now = device->getTimer()->getTime();
     const f32 frameDeltaTime = (f32)(now - then) / 1000.f; // Time in seconds
     then = now;
 
     driver->beginScene(true, true, video::SColor(0, 100, 100, 100));
+    hero.move();
 
     smgr->drawAll();
 
@@ -258,6 +213,7 @@ int main()
       lastFPS = fps;
     }
   }
+  
   device->drop();
 
   return 0;
