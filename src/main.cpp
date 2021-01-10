@@ -138,6 +138,7 @@ int main()
   Mur* obst2 = new Mur(60, 60, 29, 20);
   Mur* obst3 = new Mur(50, 40, 20, 20);
   Mur* obst4 = new Mur(30, 60, 20, 20);
+  Caisse* obst5 = new Caisse(65, 10, 10, 10);
 
   std::vector<Obstacle> obstacles;
   obstacles.push_back(*obst1);
@@ -148,6 +149,7 @@ int main()
   obstacles.push_back(*murS);
   obstacles.push_back(*murE);
   obstacles.push_back(*murW);
+  obstacles.push_back(*obst5);
 
   world.addObstacle(obst1);
   world.addObstacle(obst2);
@@ -157,6 +159,7 @@ int main()
   world.addObstacle(murW);
   world.addObstacle(murE);
   world.addObstacle(murS);
+  world.addObstacle(obst5);
 
   grid = create_grid_obstacles(Nx, Ny, obstacles);
 

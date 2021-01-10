@@ -50,6 +50,8 @@ public:
     void rotation(irr::core::vector3df rotation);
     void scale(irr::core::vector3df scale);
 
+    void setTexture(irr::io::path text);
+
 private:
     irr::core::vector2d<int> m_position;
     irr::core::vector3df m_rotation;

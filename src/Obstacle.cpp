@@ -151,3 +151,9 @@ void Obstacle::scale(irr::core::vector3df scale)
 {
     m_node->setScale(scale);
 }
+
+
+void Obstacle::setTexture(irr::io::path text)
+{
+    m_node->setMaterialTexture(0, driver->getTexture(text));
+}

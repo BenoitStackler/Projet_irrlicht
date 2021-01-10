@@ -43,11 +43,8 @@ std::vector<Enemy> create_enemy(Hero hero)
         enemies.push_back(*enemy5);
         world.addEnemy(enemy5);
 
-        Enemy* enemy6 = new Enemy("./irrlicht-1.8.4/media/faerie.md2", "./irrlicht-1.8.4/media/faerie2.bmp", irr::core::vector3di(85, 0, 10), hero_pos - irr::core::vector3df(-100, 0, -100), 20.0f, 10.0f);
-        enemies.push_back(*enemy6);
-        world.addEnemy(enemy6);
 
-        Enemy* enemy7 = new Enemy("./irrlicht-1.8.4/media/faerie.md2", "./irrlicht-1.8.4/media/faerie2.bmp", irr::core::vector3di(80, 0, 28), hero_pos - irr::core::vector3df(180, 0, 120), 20.0f, 10.0f);
+        Enemy* enemy7 = new Enemy("./irrlicht-1.8.4/media/faerie.md2", "./irrlicht-1.8.4/media/faerie2.bmp", irr::core::vector3di(80, 0, 5), hero_pos - irr::core::vector3df(180, 0, 120), 20.0f, 10.0f);
         enemies.push_back(*enemy7);
         world.addEnemy(enemy7);
 
