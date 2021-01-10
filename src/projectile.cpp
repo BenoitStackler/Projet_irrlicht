@@ -42,8 +42,6 @@ void Projectile::impact()
 void Projectile::move()
 {
     position(position() + direction());
-    new_pos = m_node->getAbsolutePosition();
-    std::cout << "eee  " << new_pos.X << "  " << new_pos.Y << "  " << new_pos.Z << std::endl;
 }
 
 void Projectile::position(irr::core::vector3df position)

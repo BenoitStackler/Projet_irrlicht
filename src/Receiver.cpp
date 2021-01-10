@@ -2,7 +2,6 @@
 #include "hero.hpp"
 #include "world.hpp"
 
-
 extern irr::video::IVideoDriver *driver;
 extern irr::scene::ISceneManager *smgr;
 extern irr::IrrlichtDevice *device;

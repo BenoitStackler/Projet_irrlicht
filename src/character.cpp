@@ -10,7 +10,7 @@ extern irr::video::IVideoDriver *driver;
 extern irr::scene::ISceneManager *smgr;
 extern irr::IrrlichtDevice *device;
 
-Character::Character(){}
+Character::Character() {}
 
 Character::Character(const irr::io::path &filename, const irr::io::path &textname, irr::core::vector3di pos, irr::core::vector3df direct, float life, float baseDamage) : m_direction(direct), m_life(life), m_baseDamage(baseDamage)
 {
@@ -83,6 +83,7 @@ void Character::direction(irr::core::vector3df direction)
     irr::core::vector3df cross = direction.crossProduct(irr::core::vector3df(0.0f, 0.0f, 1.0f));
     float cos_angle = direction.dotProduct(irr::core::vector3df(0.0f, 0.0f, 1.0f));
     float angle;
+
     if (cross.Y < 0)
     {
         angle = -acos(cos_angle);
@@ -91,6 +92,6 @@ void Character::direction(irr::core::vector3df direction)
     {
         angle = +acos(cos_angle);
     }
-
+    std::cout << "angle : " << angle * 180 / M_PI << std::endl;
     m_node->setRotation(irr::core::vector3df(0.0f, angle * 180 / M_PI, 0.0f));
 }

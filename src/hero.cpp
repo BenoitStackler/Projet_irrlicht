@@ -39,7 +39,8 @@ void Hero::move()
 Projectile Hero::shoot()
 {
         irr::core::vector3df pos_souris = irr::core::vector3df(x_souris, 0.0f, y_souris);
-        direction(position() - pos_souris);
+        direction(pos_souris - position());
+        std::cout << " x : " << position().X << " y : " << position().Y << " z : " << position().Z << std::endl;
         return Projectile(this, 1.0f, baseDamage());
 }
 

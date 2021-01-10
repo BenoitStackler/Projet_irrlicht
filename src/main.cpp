@@ -67,7 +67,7 @@ int main()
   // rect<s32>(10,10,260,22), true);
   device->getFileSystem()->addFileArchive("./irrlicht-1.8.4/media/map-20kdm2.pk3");
 
-  Terrain terain = Terrain("./irrlicht-1.8.4/media/terrain-heightmap.bmp", "./irrlicht-1.8.4/media/stones.jpg", vector3df(0.0f, 0.0f, 0.0f), vector3df(0, 0, 0), vector3df(1000.0f / 256.0f, 0, 1000.0f / 256.0f));
+  Terrain terain = Terrain("./irrlicht-1.8.4/media/terrain-heightmap.bmp", "./irrlicht-1.8.4/media/3.jpg", vector3df(0.0f, 0.0f, 0.0f), vector3df(0, 0, 0), vector3df(1000.0f / 256.0f, 0, 1000.0f / 256.0f));
   Caisse caisse = Caisse(vector2d<int>(0, 0), 10.0f);
   Caisse caisse1 = Caisse(vector2d<int>(89, 89), 10.0f);
 
@@ -128,25 +128,25 @@ int main()
   int Nx = 90;
   int Ny = 90;
 
-  Mur obst1(10,20,20,10);
+  Mur obst1(10, 20, 20, 10);
   obst1.x(10);
   obst1.y(20);
   obst1.nx(20);
   obst1.ny(10);
 
-  Mur obst2(60,60,29,20);
+  Mur obst2(60, 60, 29, 20);
   obst2.x(60);
   obst2.y(60);
   obst2.nx(29);
   obst2.ny(20);
 
-  Mur obst3(50,40,20,20);
+  Mur obst3(50, 40, 20, 20);
   obst3.x(50);
   obst3.y(40);
   obst3.nx(20);
   obst3.ny(20);
 
-  Mur obst4(30,60,20,20);
+  Mur obst4(30, 60, 20, 20);
   obst4.x(30);
   obst4.y(60);
   obst4.nx(20);
@@ -178,14 +178,13 @@ int main()
   }
 
   int k = 0;
-  
+
   for (vec2 node_v : nodes)
   {
-    Node_Graph* node = new Node_Graph(node_v.x, node_v.y, k);
+    Node_Graph *node = new Node_Graph(node_v.x, node_v.y, k);
     vec_nodes.push_back(*node);
     ++k;
   }
-  
 
   for (long unsigned int k = 0; k < vec_nodes.size(); k++)
   {
