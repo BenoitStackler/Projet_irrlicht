@@ -1,5 +1,6 @@
 #include "Obstacle.hpp"
 #include <irrlicht.h>
+#include "utils.hpp"
 
 extern irr::video::IVideoDriver *driver;
 extern irr::scene::ISceneManager *smgr;
@@ -8,8 +9,8 @@ extern float dim_pix_y;
 
 Obstacle::Obstacle() {}
 
-Obstacle::Obstacle(irr::core::vector2d<int> pos)
-    : m_position(pos), m_x(pos.X), m_y(pos.Y)
+Obstacle::Obstacle(irr::core::vector2d<int> pos) 
+:m_position(grid_to_pix_obst(pos)), m_x(pos.X), m_y(pos.Y)
 {
     m_node = smgr->addCubeSceneNode(1.0f, 0, IDFlag_IsPickable);
     if (m_node)
@@ -20,8 +21,8 @@ Obstacle::Obstacle(irr::core::vector2d<int> pos)
     }
 }
 
-Obstacle::Obstacle(irr::core::vector2d<int> pos, irr::f32 size)
-    : m_position(pos), m_size(size), m_x(pos.X), m_y(pos.Y)
+Obstacle::Obstacle(irr::core::vector2d<int> pos, irr::f32 size) 
+:m_position(grid_to_pix_obst(pos)), m_size(size), m_x(pos.X), m_y(pos.Y)
 {
     m_node = smgr->addCubeSceneNode(size, 0, IDFlag_IsPickable);
     if (m_node)
@@ -33,7 +34,7 @@ Obstacle::Obstacle(irr::core::vector2d<int> pos, irr::f32 size)
 }
 
 Obstacle::Obstacle(irr::core::vector2d<int> pos, irr::f32 size, irr::core::vector3df rot)
-    : m_position(pos), m_size(size), m_rotation(rot), m_x(pos.X), m_y(pos.Y)
+:m_position(grid_to_pix_obst(pos)), m_size(size), m_rotation(rot), m_x(pos.X), m_y(pos.Y)
 {
     m_node = smgr->addCubeSceneNode(size, 0, IDFlag_IsPickable);
     if (m_node)
@@ -50,7 +51,7 @@ Obstacle::Obstacle(int pos_x, int pos_y) //Position de l'obstacle définie et di
     irr::core::vector2d<int> pos(pos_x, pos_y);
     m_x = pos_x;
     m_y = pos_y;
-    m_position = pos;
+    m_position = grid_to_pix_obst(pos);
     m_node = smgr->addCubeSceneNode();
     if (m_node)
     {
@@ -65,7 +66,17 @@ Obstacle::Obstacle(int pos_x, int pos_y, int nx_param, int ny_param) //Position 
     irr::core::vector2d<int> pos(pos_x, pos_y);
     m_x = pos_x;
     m_y = pos_y;
-    m_position = pos;
+    irr::core::vector3df scale_3d;
+    scale_3d.X = nx_param;
+    scale_3d.Z = ny_param;
+    scale_3d.Y = 1.0f;
+
+    irr::core::vector2di scale_2d;
+    scale_2d.X = nx_param/2;
+    scale_2d.Y = ny_param/2;
+
+    m_position = grid_to_pix_obst(pos + scale_2d);
+    
     m_node = smgr->addCubeSceneNode();
     if (m_node)
     {
@@ -75,6 +86,11 @@ Obstacle::Obstacle(int pos_x, int pos_y, int nx_param, int ny_param) //Position 
     }
     m_nx = nx_param;
     m_ny = ny_param;
+
+    m_node->setScale(scale_3d);
+
+
+
 }
 
 //Getters

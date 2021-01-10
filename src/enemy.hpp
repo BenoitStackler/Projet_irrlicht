@@ -6,12 +6,13 @@
 #include "character.hpp"
 #include <vector>
 #include "Hero.hpp"
+#include "utils.hpp"
 
 class Enemy : public Character
 {
     public:
 
-    Enemy(const irr::io::path&  filename, const irr::io::path&  textname, irr::core::vector3df position, irr::core::vector3df direction, float life, float baseDamage);
+    Enemy(const irr::io::path&  filename, const irr::io::path&  textname, irr::core::vector3di position, irr::core::vector3df direction, float life, float baseDamage);
     Enemy(const irr::io::path&  filename, const irr::io::path&  textname);
 };
 

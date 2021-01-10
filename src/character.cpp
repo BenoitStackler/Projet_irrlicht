@@ -4,12 +4,15 @@
 #include "projectile.hpp"
 #include <iostream>
 #include <cmath>
+#include "utils.hpp"
 
 extern irr::video::IVideoDriver *driver;
 extern irr::scene::ISceneManager *smgr;
 extern irr::IrrlichtDevice *device;
 
-Character::Character(const irr::io::path &filename, const irr::io::path &textname, irr::core::vector3df pos, irr::core::vector3df direct, float life, float baseDamage) : m_direction(direct), m_life(life), m_baseDamage(baseDamage)
+Character::Character(){}
+
+Character::Character(const irr::io::path &filename, const irr::io::path &textname, irr::core::vector3di pos, irr::core::vector3df direct, float life, float baseDamage) : m_direction(direct), m_life(life), m_baseDamage(baseDamage)
 {
     m_mesh = smgr->getMesh(filename);
     if (!m_mesh)
@@ -19,7 +22,7 @@ Character::Character(const irr::io::path &filename, const irr::io::path &textnam
     m_direction = irr::core::vector3df(direct);
     m_node = smgr->addAnimatedMeshSceneNode(m_mesh);
     direction(direct);
-    position(pos + irr::core::vector3df(0.0f, 25.0f, 0.0f));
+    position(grid_to_pix(pos) + irr::core::vector3df(0.0f, 25.0f, 0.0f));
     m_node->setMaterialFlag(irr::video::EMF_LIGHTING, false);
     m_node->setMD2Animation(irr::scene::EMAT_STAND);
     m_node->setMaterialTexture(0, driver->getTexture(textname));
@@ -27,7 +30,16 @@ Character::Character(const irr::io::path &filename, const irr::io::path &textnam
 
 Character::Character(const irr::io::path &filename, const irr::io::path &textname)
 {
-    Character(filename, textname, irr::core::vector3df(0.0f), irr::core::vector3df(0.0f), 100.0f, 20.0f);
+    Character(filename, textname, irr::core::vector3di(0), irr::core::vector3df(0.0f), 100.0f, 20.0f);
+}
+
+float const Character::life() const
+{
+    return m_life;
+}
+float const Character::baseDamage() const
+{
+    return m_baseDamage;
 }
 
 void Character::impact()

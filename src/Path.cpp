@@ -3,9 +3,11 @@
 #include <iostream>
 #include "Node_Graph.hpp"
 #include <cmath>
+#include <string>
 
 
 Path::Path(){}
+Path::Path(std::vector<Node_Graph> path_param, float dist_param):dist_data(dist_param),path_data(path_param){}
 Path::Path(float dist_param):dist_data(dist_param){}
 Path::Path(Node_Graph node, Node_Graph start, float dist_param){
     path_data.push_back(start);
@@ -50,6 +52,8 @@ void Path::reverse(){
 }
 
 
+
+
 Path find_path(std::vector<Node_Graph>& Graph, Node_Graph& source, Node_Graph& target){
     std::vector<Node_Graph> Nodes_left;
     for (Node_Graph v : Graph){
@@ -67,13 +71,14 @@ Path find_path(std::vector<Node_Graph>& Graph, Node_Graph& source, Node_Graph& t
 Path find_path_recursive(std::vector<Node_Graph>& Nodes_left, Node_Graph& source, Node_Graph& target){
     std::vector<Node_Graph> Nodes_possible;
 
+
     for (Node_Graph node : source.neighbours()){
         Node_Graph* node_found = new Node_Graph();
         if (find(Nodes_left, node, *node_found)){
             Nodes_possible.push_back(*node_found);
-        }
     }
 
+        }
     Node_Graph* node_found = new Node_Graph();
     // Dead end
     if (Nodes_possible.empty()){
@@ -123,3 +128,37 @@ Path find_path_recursive(std::vector<Node_Graph>& Nodes_left, Node_Graph& source
     }
 }
 
+
+
+std::map<std::string, Path> compute_all_paths(std::vector<Node_Graph>& Graph)
+{
+    std::map<std::string, Path> map_paths;
+    Path path_i_j;
+    Path path_j_i;
+    for (int i = 0 ; i < Graph.size() ; i++)
+    {
+        for (int j = i + 1 ; j < Graph.size() ; j++)
+        {
+            Node_Graph node_start = Graph[i];
+            Node_Graph node_dest = Graph[j];
+            
+            // Forward
+            std::string name = "";
+            name += std::to_string(node_start.number());
+            name += "-";
+            name += std::to_string(node_dest.number());
+            path_i_j = find_path(Graph, node_start, node_dest);
+            map_paths.insert(std::make_pair(name, path_i_j));
+            
+            // Backward
+            name = "";
+            name += std::to_string(node_dest.number());
+            name += "-";
+            name += std::to_string(node_start.number());
+            path_j_i = Path(path_i_j.path(), path_i_j.dist());
+            path_j_i.reverse();
+            map_paths.insert(std::make_pair(name, path_j_i));
+        }
+    }
+    return map_paths;
+}

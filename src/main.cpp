@@ -9,6 +9,7 @@
 #include "projectile.hpp"
 #include "Terrain.hpp"
 #include "Caisse.hpp"
+#include "Mur.hpp"
 #include "Obstacle.hpp"
 #include "Grid.hpp"
 #include "Node_Graph.hpp"
@@ -33,6 +34,10 @@ IVideoDriver *driver;
 ISceneManager *smgr;
 float dim_pix_x = 10.0f;
 float dim_pix_y = 10.0f;
+Grid grid;
+std::vector<Node_Graph> vec_nodes;
+Hero hero;
+std::map<std::string, Path> map_paths;
 
 std::vector<irr::scene::ITriangleSelector *> selector;
 irr::scene::ISceneCollisionManager *collMan;
@@ -52,19 +57,25 @@ int main()
   //IGUIEnvironment* guienv = device->getGUIEnvironment();
 
   //smgr->addCameraSceneNodeFPS();
-  ICameraSceneNode *camera = smgr->addCameraSceneNode(0, vector3df(256.0f * 1 / 2, 256.0f * 0.8, 256.0f * 1 / 2), vector3df(255.0f * 1 / 2, 0, 256.0f * 1 / 2), ID_IsNotPickable);
-  camera->setRotation(vector3df(32, 90, 90));
+  ICameraSceneNode *camera = smgr->addCameraSceneNode(0, vector3df(940.0f / 2, 645.0f, 940.0f / 2), vector3df(938.0f / 2, 0, 940.0f / 2));
+  // camera->setRotation(vector3df(32, 90, 90));
   camera->bindTargetAndRotation(true);
 
   // guienv->addStaticText(L"Hello World! This is the Irrlicht Software renderer!",
   // rect<s32>(10,10,260,22), true);
   device->getFileSystem()->addFileArchive("./irrlicht-1.8.4/media/map-20kdm2.pk3");
 
-  Terrain terrain = Terrain("./irrlicht-1.8.4/media/terrain-heightmap.bmp", "./irrlicht-1.8.4/media/stones.jpg", vector3df(0.0f, 0.0f, 0.0f), vector3df(0, 0, 0), vector3df(1.0f, 0, 1.0f));
-  Caisse caisse = Caisse(vector2d<int>(10, 10), 10.0f);
-  Caisse caisse1 = Caisse(vector2d<int>(120, 120), 10.0f);
-  caisse1.scale(vector3df(3.0f, 1.0f, 1.0f));
-  Hero hero = Hero("./irrlicht-1.8.4/media/sydney.md2", "./irrlicht-1.8.4/media/sydney.bmp", vector3df(0, 0, 0), vector3df(0, 0, 0), 200.0f, 20.0f);
+  Terrain terain = Terrain("./irrlicht-1.8.4/media/terrain-heightmap.bmp", "./irrlicht-1.8.4/media/stones.jpg", vector3df(0.0f, 0.0f, 0.0f), vector3df(0, 0, 0), vector3df(1000.0f / 256.0f, 0, 1000.0f / 256.0f));
+  Caisse caisse = Caisse(vector2d<int>(0, 0), 10.0f);
+  Caisse caisse1 = Caisse(vector2d<int>(89, 89), 10.0f);
+
+  Mur murN = Mur(0, 0, 1, 89);
+  Mur murS = Mur(89, 0, 1, 89);
+  Mur murE = Mur(0, 89, 89, 1);
+  Mur murW = Mur(0, 0, 89, 1);
+
+  //caisse1.scale(vector3df(3.0f, 1.0f, 1.0f));
+  hero = Hero("./irrlicht-1.8.4/media/sydney.md2", "./irrlicht-1.8.4/media/sydney.bmp", vector3di(50, 0, 50), vector3df(0, 0, 0), 200.0f, 20.0f);
   std::vector<Enemy> enemies = create_enemy(3, hero);
 
   selector.push_back(smgr->createTriangleSelector(caisse.node()->getMesh(), caisse.node()));
@@ -143,7 +154,7 @@ int main()
   obstacles.push_back(obst3);
   obstacles.push_back(obst4);
 
-  Grid grid = create_grid_obstacles(Nx, Ny, obstacles);
+  grid = create_grid_obstacles(Nx, Ny, obstacles);
 
   std::vector<vec2> nodes = get_nodes_positions(Nx, Ny, obstacles, grid);
   Grid grid_nodes(Nx, Ny);
@@ -162,45 +173,22 @@ int main()
     std::cout << std::endl;
   }
 
-  vec2 p0;
-  vec2 p1;
-  p0.x = 0;
-  p1.x = 2;
-  p0.y = 3;
-  p1.y = 5;
-
-  auto c = bresenham(p0, p1);
-
-  std::vector<Node_Graph> vec_nodes;
   int k = 0;
+  /*
   for (vec2 node_v : nodes)
   {
-    vec_nodes.push_back(Node_Graph(node_v.x, node_v.y, k));
+    Node_Graph* node = new Node_Graph(node_v.x, node_v.y, k);
+    vec_nodes.push_back(*node);
     ++k;
   }
-  Node_Graph start(7, 4, k);
-  ++k;
-  Node_Graph end(1, 9, k);
-
-  vec_nodes.push_back(end);
-  vec_nodes.push_back(start);
-
-  start.compute_neighbours(vec_nodes, grid);
-  end.compute_neighbours(vec_nodes, grid);
+  */
 
   for (long unsigned int k = 0; k < vec_nodes.size(); k++)
   {
     vec_nodes[k].compute_neighbours(vec_nodes, grid);
   }
 
-  int s = vec_nodes.size();
-
-  Path foundPath = find_path(vec_nodes, start, end);
-
-  for (Node_Graph node : foundPath.path())
-  {
-    std::cout << '(' << node.x() << ',' << node.y() << ')' << std::endl;
-  }
+  map_paths = compute_all_paths(vec_nodes);
 
   while (device->run())
   {
@@ -211,6 +199,7 @@ int main()
     then = now;
 
     driver->beginScene(true, true, video::SColor(0, 100, 100, 100));
+    hero.move();
 
     smgr->drawAll();
 
@@ -229,6 +218,7 @@ int main()
       lastFPS = fps;
     }
   }
+
   device->drop();
 
   return 0;

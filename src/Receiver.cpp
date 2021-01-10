@@ -1,8 +1,14 @@
 #include "Receiver.hpp"
+#include "hero.hpp"
 
 extern irr::video::IVideoDriver *driver;
 extern irr::scene::ISceneManager *smgr;
 extern irr::IrrlichtDevice *device;
+extern Hero hero;
+
+irr::s32 x_souris;
+irr::s32 y_souris;
+bool is_right_click_up;
 
 // This is the one method that we have to implement
 bool Receiver::OnEvent(const irr::SEvent &event)
@@ -14,8 +20,15 @@ bool Receiver::OnEvent(const irr::SEvent &event)
     }
     else if (event.EventType == irr::EET_MOUSE_INPUT_EVENT)
     {
+
         KeyIsDown[irr::KEY_LBUTTON] = event.MouseInput.isLeftPressed();
+
         KeyIsDown[irr::KEY_RBUTTON] = event.MouseInput.isRightPressed();
+
+        x_souris = event.MouseInput.X;
+        y_souris = event.MouseInput.Y;
+
+
     }
 
     return false;
@@ -35,18 +48,29 @@ Receiver::Receiver()
 
 void keyControl(Receiver receiver)
 {
+    if (receiver.IsKeyDown(irr::KEY_RBUTTON))
+    {
+        if (is_right_click_up){
+            hero.compute_movements(x_souris, y_souris);
+            is_right_click_up = false;
+        }
+    }
+    else 
+    {
+        is_right_click_up = true;
+    }
+
+
     if (receiver.IsKeyDown(irr::KEY_LBUTTON))
-        std::cout << "left clic down" << std::endl;
-    else if (receiver.IsKeyDown(irr::KEY_RBUTTON))
-        std::cout << "right clic down" << std::endl;
+    {
+        // Nothing yet
+    }
     else if (receiver.IsKeyDown(irr::KEY_ESCAPE))
     {
-        std::cout << "esc down" << std::endl;
         device->closeDevice();
     }
     else if (receiver.IsKeyDown(irr::KEY_KEY_Q))
     {
-        std::cout << "Q down" << std::endl;
         device->closeDevice();
     }
 }
