@@ -26,6 +26,7 @@ Character::Character(const irr::io::path &filename, const irr::io::path &textnam
     m_node->setMaterialFlag(irr::video::EMF_LIGHTING, false);
     m_node->setMD2Animation(irr::scene::EMAT_STAND);
     m_node->setMaterialTexture(0, driver->getTexture(textname));
+    m_node->setID(IDFlag_IsPickable);
 }
 
 Character::Character(const irr::io::path &filename, const irr::io::path &textname)
@@ -78,7 +79,7 @@ void Character::position(irr::core::vector3df position)
 
 void Character::direction(irr::core::vector3df direction)
 {
-    direction = direction.normalize();
+    direction.normalize();
     m_direction = direction;
     irr::core::vector3df cross = direction.crossProduct(irr::core::vector3df(0.0f, 0.0f, 1.0f));
     float cos_angle = direction.dotProduct(irr::core::vector3df(0.0f, 0.0f, 1.0f));
@@ -92,6 +93,5 @@ void Character::direction(irr::core::vector3df direction)
     {
         angle = +acos(cos_angle);
     }
-    std::cout << "angle : " << angle * 180 / M_PI << std::endl;
     m_node->setRotation(irr::core::vector3df(0.0f, angle * 180 / M_PI, 0.0f));
 }

@@ -11,6 +11,7 @@ extern World world;
 float x_souris;
 float y_souris;
 bool is_right_click_up;
+bool is_left_click_up = true;
 
 // This is the one method that we have to implement
 bool Receiver::OnEvent(const irr::SEvent &event)
@@ -48,6 +49,7 @@ Receiver::Receiver()
 
 void keyControl(Receiver receiver)
 {
+    hero.direction(irr::core::vector3df(y_souris, hero.position().Y, x_souris) - hero.position());
     if (receiver.IsKeyDown(irr::KEY_RBUTTON))
     {
         if (is_right_click_up)
@@ -63,12 +65,20 @@ void keyControl(Receiver receiver)
 
     if (receiver.IsKeyDown(irr::KEY_LBUTTON))
     {
-        Projectile *proj_ptr = new Projectile;
-        *proj_ptr = hero.shoot();
-        world.addProjectile(proj_ptr);
-        std::cout << "shoot" << std::endl;
+        if (is_left_click_up)
+        {
+            Projectile *proj_ptr = new Projectile;
+            *proj_ptr = hero.shoot();
+            world.addProjectile(proj_ptr);
+            is_right_click_up = false;
+        }
     }
-    else if (receiver.IsKeyDown(irr::KEY_ESCAPE))
+    else
+    {
+        is_right_click_up = true;
+    }
+
+    if (receiver.IsKeyDown(irr::KEY_ESCAPE))
     {
         device->closeDevice();
     }

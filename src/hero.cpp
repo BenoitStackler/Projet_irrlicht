@@ -14,8 +14,8 @@
 extern Grid grid;
 extern std::vector<Node_Graph> vec_nodes;
 extern std::map<std::string, Path> map_paths;
-extern irr::s32 x_souris;
-extern irr::s32 y_souris;
+extern float x_souris;
+extern float y_souris;
 
 Hero::Hero() {}
 
@@ -38,11 +38,10 @@ void Hero::move()
 
 Projectile Hero::shoot()
 {
-        irr::core::vector3df pos_souris = irr::core::vector3df(x_souris, 0.0f, y_souris);
+        irr::core::vector3df pos_souris = irr::core::vector3df(x_souris, position().Y, y_souris);
         direction(pos_souris - position());
         return Projectile(this, 1.0f, baseDamage());
 }
-
 
 void Hero::compute_movements(float x_dest, float y_dest)
 {
@@ -56,8 +55,8 @@ void Hero::compute_movements(float x_dest, float y_dest)
         Node_Graph closest_start = find_closest_node(pos_grid_start.X, pos_grid_start.Y, pos_grid_dest.X, pos_grid_dest.Y, vec_nodes);
         Node_Graph closest_dest = find_closest_node(pos_grid_dest.X, pos_grid_dest.Y, pos_grid_start.X, pos_grid_start.Y, vec_nodes);
 
-        Node_Graph start_node(pos_grid_start.X, pos_grid_start.Y, vec_nodes.back().number() +1);
-        Node_Graph target_node(pos_grid_dest.X, pos_grid_dest.Y, vec_nodes.back().number() +2);
+        Node_Graph start_node(pos_grid_start.X, pos_grid_start.Y, vec_nodes.back().number() + 1);
+        Node_Graph target_node(pos_grid_dest.X, pos_grid_dest.Y, vec_nodes.back().number() + 2);
 
         std::vector<Node_Graph> Graph;
         for (auto node : vec_nodes)
@@ -67,21 +66,17 @@ void Hero::compute_movements(float x_dest, float y_dest)
         Graph.push_back(start_node);
         Graph.push_back(target_node);
 
-        for (int k = 0; k < Graph.size() ; k++)
+        for (int k = 0; k < Graph.size(); k++)
         {
                 Graph[k].compute_neighbours(Graph, grid);
         }
 
-
         Path path = find_path(Graph, Graph[Graph.size() - 2], Graph[Graph.size() - 1]);
 
-
-        for (int k = 1 ; k < path.path().size() ; k++)
+        for (int k = 1; k < path.path().size(); k++)
         {
-                compute_mvt_grid(path.path()[k-1], path.path()[k]);
+                compute_mvt_grid(path.path()[k - 1], path.path()[k]);
         }
-        
-
 }
 
 void Hero::compute_mvt_to_grid(irr::core::vector3df pos, Node_Graph closest_start)
@@ -92,7 +87,6 @@ void Hero::compute_mvt_to_grid(irr::core::vector3df pos, Node_Graph closest_star
         irr::core::vector3df coords_px_node = grid_to_pix(coords_grid_node);
         compute_mvt(pos, coords_px_node);
 }
-
 
 void Hero::compute_mvt_grid(Node_Graph closest_start, Node_Graph closest_dest)
 {
@@ -107,7 +101,6 @@ void Hero::compute_mvt_grid(Node_Graph closest_start, Node_Graph closest_dest)
         compute_mvt(coords_px_node_start, coords_px_node_dest);
 }
 
-
 void Hero::compute_mvt_from_grid(irr::core::vector3df pos, Node_Graph closest_dest)
 {
         irr::core::vector2di coords_grid_node;
@@ -117,24 +110,21 @@ void Hero::compute_mvt_from_grid(irr::core::vector3df pos, Node_Graph closest_de
         compute_mvt(coords_px_node, pos);
 }
 
-
 void Hero::compute_mvt(irr::core::vector3df start, irr::core::vector3df dest)
 {
-        float dx =(dest.X - start.X);
-        float dy =(dest.Z - start.Z);
-        float norm_dx_dy = sqrt(pow(dx,2) + pow(dy,2));
+        float dx = (dest.X - start.X);
+        float dy = (dest.Z - start.Z);
+        float norm_dx_dy = sqrt(pow(dx, 2) + pow(dy, 2));
 
         if (norm_dx_dy != 0.0f)
         {
                 dx /= norm_dx_dy;
                 dy /= norm_dx_dy;
 
-                for (int i = 0 ; i < norm_dx_dy ; i++)
+                for (int i = 0; i < norm_dx_dy; i++)
                 {
-                        movement_positions.push_back(irr::core::vector3df(start.X + i*dx, start.Y, start.Z + i*dy));
+                        movement_positions.push_back(irr::core::vector3df(start.X + i * dx, start.Y, start.Z + i * dy));
                 }
-                movement_positions.push_back(irr::core::vector3df(start.X + norm_dx_dy*dx, start.Y, start.Z + norm_dx_dy*dy));
+                movement_positions.push_back(irr::core::vector3df(start.X + norm_dx_dy * dx, start.Y, start.Z + norm_dx_dy * dy));
         }
 }
-
-

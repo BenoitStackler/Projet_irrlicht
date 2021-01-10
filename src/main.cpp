@@ -80,16 +80,19 @@ int main()
   world.defHero(&hero);
   std::vector<Enemy> enemies = create_enemy(hero);
 
-  selector.push_back(smgr->createTriangleSelector(caisse.node()->getMesh(), caisse.node()));
-  selector.push_back(smgr->createTriangleSelector(caisse1.node()->getMesh(), caisse1.node()));
+  selector.push_back(smgr->createTriangleSelector(murN.node()->getMesh(), murN.node()));
+  selector.push_back(smgr->createTriangleSelector(murS.node()->getMesh(), murS.node()));
+  selector.push_back(smgr->createTriangleSelector(murE.node()->getMesh(), murE.node()));
+  selector.push_back(smgr->createTriangleSelector(murW.node()->getMesh(), murW.node()));
   selector.push_back(smgr->createTriangleSelector(hero.node()));
 
-  Projectile proj = hero.shoot();
-  //world.addProjectile(&proj);
+  for (auto e : enemies)
+  {
+    selector.push_back(smgr->createTriangleSelector(e.node()));
+  }
 
-  std::vector<Projectile> vect_proj;
-  vect_proj.push_back(proj);
-  collisionProj(vect_proj);
+  // std::vector<Projectile> vect_proj;
+  // vect_proj.push_back(proj);
 
   //IAnimatedMesh* mesh = smgr->getMesh("./irrlicht-1.8.4/media/sydney.md2");
   // scene::IAnimatedMesh *meshq = smgr->getMesh("20kdm2.bsp");
@@ -180,7 +183,6 @@ int main()
     ++k;
   }
 
-
   while (device->run())
   {
     keyControl(receiver);
@@ -195,6 +197,8 @@ int main()
     {
       proj->move();
     }
+
+    collisionProj(world.getProjectiles());
     smgr->drawAll();
 
     driver->endScene();

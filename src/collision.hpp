@@ -5,6 +5,6 @@
 #include <vector>
 #include "projectile.hpp"
 
-void collisionProj(std::vector<Projectile> vect_proj);
+void collisionProj(std::vector<Projectile *> vect_proj);
 
 #endif
