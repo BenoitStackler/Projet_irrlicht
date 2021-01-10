@@ -204,7 +204,7 @@ int main()
 
     if (lastFPS != fps)
     {
-      core::stringw tmp(L"Video Game - Irrlicht Engine [");
+      core::stringw tmp(L"Video Game CPE [");
       tmp += driver->getName();
       tmp += L"] fps: ";
       tmp += fps;
