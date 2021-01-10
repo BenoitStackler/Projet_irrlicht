@@ -42,3 +42,14 @@ std::vector<Projectile *> World::getProjectiles()
 {
     return m_projectiles;
 }
+
+void World::deleteEnemy(int i)
+{
+    auto it = m_enemies.begin();
+    m_enemies.erase(it+i);
+}
+void World::deleteProjectile(int i)
+{
+    auto it = m_projectiles.begin();
+    m_projectiles.erase(it+i);
+}

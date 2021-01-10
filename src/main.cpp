@@ -54,7 +54,7 @@ int main()
   device = createDevice(video::EDT_OPENGL, dimension2d<u32>(940, 940), 16, false, false, false, &receiver);
   if (!device)
     return 1;
-  device->setWindowCaption(L"Hello CPE!");
+  device->setWindowCaption(L"Jeu CPE!");
 
   driver = device->getVideoDriver();
   smgr = device->getSceneManager();
@@ -73,20 +73,21 @@ int main()
   Caisse caisse = Caisse(vector2d<int>(0, 0), 10.0f);
   Caisse caisse1 = Caisse(vector2d<int>(89, 89), 10.0f);
 
-  Mur murN = Mur(0, 0, 1, 89);
-  Mur murS = Mur(89, 0, 1, 89);
-  Mur murE = Mur(0, 89, 89, 1);
-  Mur murW = Mur(0, 0, 89, 1);
 
   //caisse1.scale(vector3df(3.0f, 1.0f, 1.0f));
   hero = Hero("./irrlicht-1.8.4/media/sydney.md2", "./irrlicht-1.8.4/media/sydney.bmp", vector3di(45, 0, 45), vector3df(0, 0, 0), 50.0f, 20.0f);
   world.defHero(&hero);
   std::vector<Enemy> enemies = create_enemy(hero);
 
-  selector.push_back(smgr->createTriangleSelector(murN.node()->getMesh(), murN.node()));
-  selector.push_back(smgr->createTriangleSelector(murS.node()->getMesh(), murS.node()));
-  selector.push_back(smgr->createTriangleSelector(murE.node()->getMesh(), murE.node()));
-  selector.push_back(smgr->createTriangleSelector(murW.node()->getMesh(), murW.node()));
+  Mur* murN = new Mur(0, 0, 1, 89);
+  Mur* murS = new Mur(89, 0, 1, 89);
+  Mur* murE = new Mur(0, 89, 89, 1);
+  Mur* murW = new Mur(0, 0, 89, 1);
+
+  selector.push_back(smgr->createTriangleSelector(murN->node()->getMesh(), murN->node()));
+  selector.push_back(smgr->createTriangleSelector(murS->node()->getMesh(), murS->node()));
+  selector.push_back(smgr->createTriangleSelector(murE->node()->getMesh(), murE->node()));
+  selector.push_back(smgr->createTriangleSelector(murW->node()->getMesh(), murW->node()));
   selector.push_back(smgr->createTriangleSelector(hero.node()));
 
   for (auto e : enemies)
@@ -133,48 +134,29 @@ int main()
   int Nx = 90;
   int Ny = 90;
 
-  Mur obst1(10, 20, 20, 10);
-  obst1.x(10);
-  obst1.y(20);
-  obst1.nx(20);
-  obst1.ny(10);
-
-  Mur obst2(60, 60, 29, 20);
-  obst2.x(60);
-  obst2.y(60);
-  obst2.nx(29);
-  obst2.ny(20);
-
-  Mur obst3(50, 40, 20, 20);
-  obst3.x(50);
-  obst3.y(40);
-  obst3.nx(20);
-  obst3.ny(20);
-
-  Mur obst4(30, 60, 20, 20);
-  obst4.x(30);
-  obst4.y(60);
-  obst4.nx(20);
-  obst4.ny(20);
+  Mur* obst1 = new Mur(10, 20, 20, 10);
+  Mur* obst2 = new Mur(60, 60, 29, 20);
+  Mur* obst3 = new Mur(50, 40, 20, 20);
+  Mur* obst4 = new Mur(30, 60, 20, 20);
 
   std::vector<Obstacle> obstacles;
-  obstacles.push_back(obst1);
-  obstacles.push_back(obst2);
-  obstacles.push_back(obst3);
-  obstacles.push_back(obst4);
-  obstacles.push_back(murN);
-  obstacles.push_back(murS);
-  obstacles.push_back(murE);
-  obstacles.push_back(murW);
+  obstacles.push_back(*obst1);
+  obstacles.push_back(*obst2);
+  obstacles.push_back(*obst3);
+  obstacles.push_back(*obst4);
+  obstacles.push_back(*murN);
+  obstacles.push_back(*murS);
+  obstacles.push_back(*murE);
+  obstacles.push_back(*murW);
 
-  world.addObstacle(&obst1);
-  world.addObstacle(&obst2);
-  world.addObstacle(&obst3);
-  world.addObstacle(&obst4);
-  world.addObstacle(&murN);
-  world.addObstacle(&murW);
-  world.addObstacle(&murE);
-  world.addObstacle(&murS);
+  world.addObstacle(obst1);
+  world.addObstacle(obst2);
+  world.addObstacle(obst3);
+  world.addObstacle(obst4);
+  world.addObstacle(murN);
+  world.addObstacle(murW);
+  world.addObstacle(murE);
+  world.addObstacle(murS);
 
   grid = create_grid_obstacles(Nx, Ny, obstacles);
 
@@ -195,6 +177,20 @@ int main()
     ++k;
   }
 
+
+
+
+  std::cout << std::endl;
+  std::cout << std::endl;
+  std::cout << std::endl;
+  std::cout << std::endl;
+  std::cout << std::endl;
+
+  std::cout << "Debut de la partie" << std::endl;
+  std::cout << "________________________________________________________" << std::endl;
+
+
+  int cpt = 0;
   while (device->run() && !EndGame)
   {
     keyControl(receiver);
@@ -205,12 +201,36 @@ int main()
 
     driver->beginScene(true, true, video::SColor(0, 100, 100, 100));
     hero.move();
+
+    if (cpt == 60)
+    {
+      for (auto enemy : world.getEnemies())
+      {
+        auto p = new Projectile;
+        *p = (enemy->shoot());
+        world.addProjectile(p);
+      }
+      cpt = 0;
+    }
+    cpt++;
+
+
     for (auto proj : world.getProjectiles())
     {
       proj->move();
     }
 
-    compute_collisions(&world);
+    compute_collisions();
+    if (EndGame)
+    {
+      std::cout << "________________________________________________________" << std::endl;
+      std::cout << "Fin de la partie" << std::endl;
+      if (Win)
+        std::cout << "Felicitations, vous avez gagne" << std::endl;
+      else
+        std::cout << "Dommage, vous avez perdu" << std::endl;
+    }
+
 
     //collisionProj(world.getProjectiles());
     smgr->drawAll();
@@ -229,6 +249,7 @@ int main()
       device->setWindowCaption(tmp.c_str());
       lastFPS = fps;
     }
+
   }
 
   device->drop();

@@ -10,6 +10,7 @@ class Obstacle
 {
 public:
     Obstacle();
+    Obstacle(std::string t);
     Obstacle(irr::core::vector2d<int> position);
     Obstacle(irr::core::vector2d<int> position, irr::f32 size);
     Obstacle(irr::core::vector2d<int> position, irr::f32 size, irr::core::vector3df rotation);
@@ -39,6 +40,8 @@ public:
     void nx(int len);
     void ny(int height);
 
+    void setType(std::string t);
+
     //Position de l'obstacle
     irr::core::vector2d<int> const position() const;
     std::string type(); //Retourne une string donnant le type d'obstacle(mur ou caisse)
@@ -52,6 +55,7 @@ private:
     irr::core::vector3df m_rotation;
     irr::f32 m_size;
     irr::scene::IMeshSceneNode *m_node;
+    std::string m_type;
 
     //Attributs de position du point haut gauche de l'obstacle
     int m_x; //Position en x du point haut gauche de l'obstacle (en nombre de case de grille)

@@ -73,10 +73,12 @@ void Hero::compute_movements(float x_dest, float y_dest)
 
         Path path = find_path(Graph, Graph[Graph.size() - 2], Graph[Graph.size() - 1]);
 
+        compute_mvt_to_grid(current_pos, start_node);
         for (int k = 1; k < path.path().size(); k++)
         {
                 compute_mvt_grid(path.path()[k - 1], path.path()[k]);
         }
+        compute_mvt_from_grid(irr::core::vector3df(x_dest, current_pos.Y, y_dest), target_node);
 }
 
 void Hero::compute_mvt_to_grid(irr::core::vector3df pos, Node_Graph closest_start)

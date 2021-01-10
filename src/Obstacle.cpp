@@ -7,10 +7,11 @@ extern irr::scene::ISceneManager *smgr;
 extern float dim_pix_x;
 extern float dim_pix_y;
 
-Obstacle::Obstacle() {}
+Obstacle::Obstacle():m_type("Obstacle") {}
+Obstacle::Obstacle(std::string t):m_type(t) {}
 
 Obstacle::Obstacle(irr::core::vector2d<int> pos) 
-:m_position(grid_to_pix_obst(pos)), m_x(pos.X), m_y(pos.Y)
+:m_position(grid_to_pix_obst(pos)), m_x(pos.X), m_y(pos.Y),m_type("Obstacle")
 {
     m_node = smgr->addCubeSceneNode(1.0f, 0, IDFlag_IsPickable);
     if (m_node)
@@ -22,7 +23,7 @@ Obstacle::Obstacle(irr::core::vector2d<int> pos)
 }
 
 Obstacle::Obstacle(irr::core::vector2d<int> pos, irr::f32 size) 
-:m_position(grid_to_pix_obst(pos)), m_size(size), m_x(pos.X), m_y(pos.Y)
+:m_position(grid_to_pix_obst(pos)), m_size(size), m_x(pos.X), m_y(pos.Y),m_type("Obstacle")
 {
     m_node = smgr->addCubeSceneNode(size, 0, IDFlag_IsPickable);
     if (m_node)
@@ -34,7 +35,7 @@ Obstacle::Obstacle(irr::core::vector2d<int> pos, irr::f32 size)
 }
 
 Obstacle::Obstacle(irr::core::vector2d<int> pos, irr::f32 size, irr::core::vector3df rot)
-:m_position(grid_to_pix_obst(pos)), m_size(size), m_rotation(rot), m_x(pos.X), m_y(pos.Y)
+:m_position(grid_to_pix_obst(pos)), m_size(size), m_rotation(rot), m_x(pos.X), m_y(pos.Y),m_type("Obstacle")
 {
     m_node = smgr->addCubeSceneNode(size, 0, IDFlag_IsPickable);
     if (m_node)
@@ -59,6 +60,7 @@ Obstacle::Obstacle(int pos_x, int pos_y) //Position de l'obstacle définie et di
         m_node->setMaterialTexture(0, driver->getTexture("./irrlicht-1.8.4/media/wall.bmp"));
         m_node->setMaterialFlag(irr::video::EMF_LIGHTING, false);
     }
+    m_type = "Obstacle";
 }
 
 Obstacle::Obstacle(int pos_x, int pos_y, int nx_param, int ny_param) //Position et dimensions définies
@@ -88,6 +90,7 @@ Obstacle::Obstacle(int pos_x, int pos_y, int nx_param, int ny_param) //Position 
     m_ny = ny_param;
 
     m_node->setScale(scale_3d);
+    m_type = "Obstacle";
 
 
 
@@ -133,9 +136,15 @@ void Obstacle::y(int pos_y) { m_y = pos_y; };
 void Obstacle::nx(int len) { m_nx = len; };
 void Obstacle::ny(int height) { m_ny = height; };
 
+
+void Obstacle::setType(std::string t)
+{
+    m_type = t;
+}
+
 std::string Obstacle::type()
 {
-    return "Obstacle";
+    return m_type;
 }
 
 void Obstacle::scale(irr::core::vector3df scale)

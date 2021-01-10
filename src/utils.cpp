@@ -7,6 +7,7 @@
 
 extern bool EndGame;
 extern bool Win;
+extern World world;
 
 irr::core::vector3df grid_to_pix(irr::core::vector2di coords_grid_2d)
 {
@@ -49,66 +50,93 @@ irr::core::vector2di pix_to_grid(irr::core::vector3df coords_pix_3d)
 }
 
 
-void compute_collisions(World* world_ptr)
+void compute_collisions()
 
 {
-    auto hero_ptr = world_ptr->getHero();
+    auto hero_ptr = world.getHero();
 
-    auto it_proj_begin = world_ptr->getProjectiles().begin();
-    auto it_enemies_begin = world_ptr->getEnemies().begin();
-    auto it_obstacles_begin = world_ptr->getObstacles().begin();
+    int it_proj = 0;
 
-    std::cout << "test 1" << std::endl;
-    for (auto it_proj = it_proj_begin  ; it_proj != world_ptr->getProjectiles().end() ; it_proj++)
+    for (auto proj_ptr : world.getProjectiles())
     {
-        std::cout << "test 2" << std::endl;
-        float dist = sqrt(pow((*it_proj)->position().X - (hero_ptr)->position().X, 2) + pow((*it_proj)->position().Z - (hero_ptr)->position().Z, 2));
-        std::cout << "test 3" << std::endl;
+        bool collision_found = false;
+        float dist = sqrt(pow((proj_ptr)->position().X - (hero_ptr)->position().X, 2) + pow((proj_ptr)->position().Z - (hero_ptr)->position().Z, 2));
         if (dist < dist_collide)
         {
             int dead = (hero_ptr)->impact();
-            (*it_proj)->node()->drop();
-            world_ptr->getProjectiles().erase(it_proj);
+            
+            (proj_ptr)->node()->remove();
+            world.deleteProjectile(it_proj);
+            it_proj--;
             if (dead)
             {
                 EndGame = true;
             }
+            collision_found = true;
+            std::cout << "Attention, vous avez ete touche.e" << std::endl;
         }
 
-        for (auto it_enemies = it_enemies_begin  ; it_enemies != world_ptr->getEnemies().end() ; it_enemies++)
+        int it_enemy = 0;
+        for (auto enemy_ptr : world.getEnemies())
         {
-            float dist = sqrt(pow((*it_proj)->position().X - (*it_enemies)->position().X, 2) + pow((*it_proj)->position().Z - (*it_enemies)->position().Z, 2));
-            if (dist < dist_collide)
+            if (!collision_found)
             {
-                int dead = (*it_enemies)->impact();
-                (*it_proj)->node()->drop();
-                world_ptr->getProjectiles().erase(it_proj);
-                if (dead)
+                float dist = sqrt(pow((proj_ptr)->position().X - (enemy_ptr)->position().X, 2) + pow((proj_ptr)->position().Z - (enemy_ptr)->position().Z, 2));
+                if (dist < dist_collide)
                 {
-                    (*it_enemies)->node()->drop();
-                    world_ptr->getEnemies().erase(it_enemies);
-                    if (world_ptr->getEnemies().empty())
+                    collision_found = true;
+                    int dead = (enemy_ptr)->impact();
+                    (proj_ptr)->node()->remove();
+                    world.deleteProjectile(it_proj);
+                    it_proj--;
+                    if (dead)
                     {
-                        EndGame = true;
-                        Win = true;
+                        (enemy_ptr)->node()->remove();
+                        world.deleteEnemy(it_enemy);
+                        it_enemy--;
+                        if (world.getEnemies().empty())
+                        {
+                            EndGame = true;
+                            Win = true;
+                        }
                     }
                 }
             }
+            it_enemy++;
         }
 
-        for (auto it_obstacles = it_obstacles_begin  ; it_obstacles != world_ptr->getObstacles().end() ; it_obstacles++)
-        {
-            if ((*it_obstacles)->type() == "Mur")
-            {
-                auto pos_obst = grid_to_pix((*it_obstacles)->position());
-                float dist = sqrt(pow((*it_proj)->position().X - pos_obst.X, 2) + pow((*it_proj)->position().Z - pos_obst.Z, 2));
-                if (dist < dist_collide)
-                {
-                    (*it_proj)->node()->drop();
-                    world_ptr->getProjectiles().erase(it_proj);
-                }
 
+
+        for (auto it_obstacles : world.getObstacles())
+        {
+            if (!collision_found)
+            {   
+                if ((it_obstacles)->type() == "Mur")
+                {
+                    irr::core::vector2di index_NW = irr::core::vector2di((it_obstacles)->x(), (it_obstacles)->y());
+                    irr::core::vector2di index_SE = index_NW + irr::core::vector2di((it_obstacles)->nx(), (it_obstacles)->ny());
+                    auto pos_obst_NW = grid_to_pix(index_NW);
+                    auto pos_obst_SE = grid_to_pix(index_SE);
+
+                    //std::cout << pos_obst_SE.X << std::endl;
+                    if (proj_ptr->position().X > pos_obst_NW.X && 
+                        proj_ptr->position().X < pos_obst_SE.X && 
+                        proj_ptr->position().Z > pos_obst_NW.Z && 
+                        proj_ptr->position().Z < pos_obst_SE.Z)
+
+                    //float dist = sqrt(pow((proj_ptr)->position().X - pos_obst.X, 2) + pow((proj_ptr)->position().Z - pos_obst.Z, 2));
+                    //std::cout << pos_obst.X << std::endl;
+                    //if (dist < dist_collide + 10.0f)
+                    {
+                        collision_found = true;
+                        (proj_ptr)->node()->remove();
+                        world.deleteProjectile(it_proj);
+                        it_proj--;
+                    }
+
+                }
             }
         }
+        it_proj++;
     }
 }

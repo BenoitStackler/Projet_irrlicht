@@ -17,6 +17,8 @@ public:
     void addObstacle(Obstacle *obstacle);
     void addEnemy(Enemy *enemy);
     void addProjectile(Projectile *projectile);
+    void deleteEnemy(int i);
+    void deleteProjectile(int i);
 
     Hero *getHero();
     std::vector<Obstacle *> getObstacles();

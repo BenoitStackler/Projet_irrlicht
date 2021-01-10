@@ -14,13 +14,13 @@ Projectile::Projectile(Character *caster, float speed, float damage) : m_positio
     m_node = smgr->addSphereSceneNode(2.0f);
     if (m_node)
     {
-        position(m_position + irr::core::vector3df(0.0f, 10, 0.0f));
+        position(m_position + irr::core::vector3df(10.0f*m_direction.X, 10, 10.0f*m_direction.Z));
         m_node->setMaterialTexture(0, driver->getTexture("./irrlicht-1.8.4/media/1.jpg"));
         m_node->setMaterialFlag(irr::video::EMF_LIGHTING, false);
         for (auto s : selector)
         {
             irr::scene::ISceneNodeAnimator *anim = smgr->createCollisionResponseAnimator(s, m_node, irr::core::vector3df(5, 5, 5), irr::core::vector3df(0, 0, 0), irr::core::vector3df(0, 0, 0));
-            m_node->addAnimator(anim);
+            //m_node->addAnimator(anim);
             anim->drop();
         }
     }

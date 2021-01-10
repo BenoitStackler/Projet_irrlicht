@@ -13,6 +13,7 @@ float y_souris;
 bool is_right_click_up;
 bool is_left_click_up = true;
 
+
 // This is the one method that we have to implement
 bool Receiver::OnEvent(const irr::SEvent &event)
 {
