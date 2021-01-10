@@ -1,13 +1,14 @@
 #include "Receiver.hpp"
 #include "hero.hpp"
 
+
 extern irr::video::IVideoDriver *driver;
 extern irr::scene::ISceneManager *smgr;
 extern irr::IrrlichtDevice *device;
 extern Hero hero;
 
-irr::s32 x_souris;
-irr::s32 y_souris;
+float x_souris;
+float y_souris;
 bool is_right_click_up;
 
 // This is the one method that we have to implement
@@ -25,8 +26,8 @@ bool Receiver::OnEvent(const irr::SEvent &event)
 
         KeyIsDown[irr::KEY_RBUTTON] = event.MouseInput.isRightPressed();
 
-        x_souris = event.MouseInput.X;
-        y_souris = event.MouseInput.Y;
+        y_souris = (event.MouseInput.X);
+        x_souris = (event.MouseInput.Y);
 
 
     }

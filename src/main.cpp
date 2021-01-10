@@ -47,7 +47,7 @@ int main()
   // create device
   Receiver receiver;
 
-  device = createDevice(video::EDT_OPENGL, dimension2d<u32>(1000, 1000), 16, false, false, false, &receiver);
+  device = createDevice(video::EDT_OPENGL, dimension2d<u32>(940, 940), 16, false, false, false, &receiver);
   if (!device)
     return 1;
   device->setWindowCaption(L"Hello CPE!");
@@ -115,32 +115,32 @@ int main()
   // This is the movemen speed in units per second.
   const f32 MOVEMENT_SPEED = 40.f;
 
-  int Nx = 10;
-  int Ny = 10;
+  int Nx = 90;
+  int Ny = 90;
 
-  Obstacle obst1;
-  obst1.x(1);
-  obst1.y(2);
-  obst1.nx(2);
-  obst1.ny(1);
+  Mur obst1(10,20,20,10);
+  obst1.x(10);
+  obst1.y(20);
+  obst1.nx(20);
+  obst1.ny(10);
 
-  Obstacle obst2;
-  obst2.x(6);
-  obst2.y(6);
-  obst2.nx(3);
-  obst2.ny(2);
+  Mur obst2(60,60,29,20);
+  obst2.x(60);
+  obst2.y(60);
+  obst2.nx(29);
+  obst2.ny(20);
 
-  Obstacle obst3;
-  obst3.x(5);
-  obst3.y(4);
-  obst3.nx(2);
-  obst3.ny(2);
+  Mur obst3(50,40,20,20);
+  obst3.x(50);
+  obst3.y(40);
+  obst3.nx(20);
+  obst3.ny(20);
 
-  Obstacle obst4;
-  obst4.x(3);
-  obst4.y(6);
-  obst4.nx(2);
-  obst4.ny(2);
+  Mur obst4(30,60,20,20);
+  obst4.x(30);
+  obst4.y(60);
+  obst4.nx(20);
+  obst4.ny(20);
 
   std::vector<Obstacle> obstacles;
   obstacles.push_back(obst1);
@@ -170,14 +170,14 @@ int main()
 
   
   int k = 0;
-  /*
+  
   for (vec2 node_v : nodes)
   {
     Node_Graph* node = new Node_Graph(node_v.x, node_v.y, k);
     vec_nodes.push_back(*node);
     ++k;
   }
-  */
+  
 
   for (int k = 0; k < vec_nodes.size(); k++)
   {
